@@ -42,6 +42,7 @@ class Upgrade {
         $context = [
             'url'   => $this->url,
             'label' => __( 'Upgrade', 'alledia-framework' ),
+            'class' => $this->container['PLUGIN_NAME'],
         ];
 
         $link = $twig->render( 'action_link_upgrade.twig', $context );

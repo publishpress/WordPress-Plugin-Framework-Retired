@@ -7,7 +7,7 @@ class Container extends \Pimple\Container {
         parent::__construct( $values );
 
         $this['VERSION'] = function ( $c ) {
-            return '0.1.1';
+            return '0.1.3';
         };
 
         $this['PLUGIN_BASENAME'] = function ( $c ) use ( $values ) {
@@ -19,7 +19,11 @@ class Container extends \Pimple\Container {
         };
 
         $this['ASSETS_BASE_URL'] = function ( $c ) {
-            return  get_site_url() . '/' . str_replace( ABSPATH, '', __DIR__ ) . '/assets';
+            return get_site_url() . '/' . str_replace( ABSPATH, '', __DIR__ ) . '/assets';
+        };
+
+        $this['PLUGIN_NAME'] = function ( $c ) {
+            return str_replace( '.php', '', basename( $c['PLUGIN_BASENAME'] ) );
         };
 
         $this['text_domain'] = function ( $c ) {
