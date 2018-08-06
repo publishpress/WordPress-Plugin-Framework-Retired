@@ -40,7 +40,7 @@ class Upgrade {
         $twig = $this->container['twig'];
 
         $context = [
-            'url'   => 'https://upstreamplugin.com/pricing/',
+            'url'   => $this->url,
             'label' => __( 'Upgrade', 'alledia-framework' ),
         ];
 
