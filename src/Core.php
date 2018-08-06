@@ -3,21 +3,34 @@
 namespace AllediaFramework;
 
 class Core {
-	/**
-	 * Core constructor.
-	 */
-	public function __construct() {
-		$this->load_textdomain();
-	}
 
-	/**
-	 * Load the framework's text domain.
-	 */
-	protected function load_textdomain() {
-		$mo_file = __DIR__ . 'languages/alledia-framework-' . get_locale() . '.mo';
+    protected $container;
 
-		if ( file_exists( $mo_file ) ) {
-			load_textdomain( 'alledia-framework', $mo_file );
-		}
-	}
+    /**
+     * Core constructor.
+     *
+     * @param string $plugin_base_name
+     */
+    public function __construct( $plugin_base_name ) {
+        $container = $this->set_container( $plugin_base_name );
+
+        $container['text_domain']->load();
+        $container['assets']->enqueue_styles();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function get_container() {
+        return $this->container;
+    }
+
+    /**
+     * @param $plugin_base_name
+     */
+    protected function set_container( $plugin_base_name ) {
+        $this->container = new Container( [ 'PLUGIN_BASENAME' => $plugin_base_name ] );
+
+        return $this->container;
+    }
 }

@@ -3,31 +3,50 @@
 namespace AllediaFramework;
 
 class Upgrade {
-    protected $url;
-
-    protected $base_name;
+    /**
+     * @var Container
+     */
+    protected $container;
 
     /**
-     * Add an Upgrade linkn to the action links in the plugin list.
+     * @var string
      */
-    public function add_upgrade_action_link( $plugin_base_name, $url ) {
-        $this->base_name = $plugin_base_name;
-        $this->url       = $url;
+    protected $url;
 
-        add_action( 'plugin_action_links_' . $this->base_name, [ $this, 'plugin_action_links' ], 999 );
+    /**
+     * TextDomain constructor.
+     *
+     * @param Container $container
+     */
+    public function __construct( Container $container ) {
+        $this->container = $container;
+    }
+
+    /**
+     * Add an Upgrade link to the action links in the plugin list.
+     */
+    public function add_action_upgrade_link( $url ) {
+        $this->url = $url;
+
+
+        add_action( 'plugin_action_links_' . $this->container['PLUGIN_BASENAME'], [ $this, 'plugin_action_links' ],
+            999 );
     }
 
     /**
      * @param array $links
      */
     public function plugin_action_links( $links ) {
-        $links = array_merge(
-            $links,
-            [
-                '<a href="' . $this->url . '" target="_blank" id="upstream-upgrade-link">' . __( 'Upgrade',
-                    'alledia-framework' ) . '</a>',
-            ]
-        );
+        $twig = $this->container['twig'];
+
+        $context = [
+            'url'   => 'https://upstreamplugin.com/pricing/',
+            'label' => __( 'Upgrade', 'alledia-framework' ),
+        ];
+
+        $link = $twig->render( 'action_link_upgrade.twig', $context );
+
+        $links = array_merge( $links, [ $link ] );
 
         return $links;
     }
