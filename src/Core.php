@@ -15,7 +15,8 @@ class Core {
         $container = $this->set_container( $plugin_base_name );
 
         $container['text_domain']->load();
-        $container['assets']->enqueue_styles();
+
+        add_action( 'admin_enqueue_scripts', [ $container['assets'], 'enqueue_styles' ] );
     }
 
     /**
