@@ -7,7 +7,7 @@ class Container extends \Pimple\Container {
         parent::__construct( $values );
 
         $this['VERSION'] = function ( $c ) {
-            return '0.1.3';
+            return '0.1.4';
         };
 
         $this['PLUGIN_BASENAME'] = function ( $c ) use ( $values ) {
