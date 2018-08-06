@@ -34,4 +34,18 @@ class Core {
 
         return $this->container;
     }
+
+    /**
+     * @param $service_name
+     *
+     * @return mixed
+     * @throws \Exception
+     */
+    public function get_service( $service_name ) {
+        if ( ! isset( $this->container[ $service_name ] ) ) {
+            throw new \Exception( 'Service ' . $service_name . ' is undefined.' );
+        }
+
+        return $this->container[ $service_name ];
+    }
 }
