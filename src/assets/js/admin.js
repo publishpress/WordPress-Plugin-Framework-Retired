@@ -1,16 +1,13 @@
 (function (global, $) {
-    // Check if we already have the framework.
-    if (global.allediaframework) {
-        return;
-    }
-
     /**
      * The framework constructor.
      *
+     * @param plugin_name
+     *
      * @constructor
      */
-    var Framework = function () {
-
+    var Framework = function (plugin_name) {
+        this.plugin_name = plugin_name;
     };
 
     /**
@@ -38,7 +35,8 @@
                     if ($(this).find('a').length > 0) {
                         if ($(this).find('a').attr('href') === href) {
                             // Check if the current menu links to the extensions page.
-                            $(this).addClass('alledia-framework-addon-submenu');
+                            $(this).addClass('alledia-framework-highlight');
+                            $(this).addClass(this.plugin_name);
                             menu_found = true;
                         }
                     }
@@ -48,6 +46,8 @@
         );
     };
 
-    // Add to the global scope.
-    global.allediaframework = new Framework();
+    // Check if we already have the framework.
+    if (! global.Alledia_Framework) {
+        global.Alledia_Framework = Framework;
+    }
 })(window, jQuery);
