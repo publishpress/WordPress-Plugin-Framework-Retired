@@ -18,7 +18,7 @@
      *
      * @param href
      */
-    Framework.prototype.highlight_addons_menu = function (href) {
+    Framework.prototype.highlight_submenu = function (href) {
         // Add a custom class to the Extensions menu item for custom styling.
         var menu_found = false,
             interval,
