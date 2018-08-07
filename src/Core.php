@@ -16,7 +16,7 @@ class Core {
 
         $container['text_domain']->load();
 
-        add_action( 'admin_enqueue_scripts', [ $container['assets'], 'enqueue_styles' ] );
+        add_action( 'admin_enqueue_scripts', [ $container['assets'], 'admin_enqueue_styles' ] );
     }
 
     /**

@@ -18,12 +18,12 @@ class Assets {
     }
 
     /**
-     * Enqueue styles.
+     * Enqueue styles for the admin UI.
      */
-    public function enqueue_styles() {
+    public function admin_enqueue_styles() {
         wp_enqueue_style(
             'alledia-framework',
-            $this->container['ASSETS_BASE_URL'] . '/css/style.css',
+            $this->container['ASSETS_BASE_URL'] . '/css/admin.css',
             [],
             $this->container['VERSION']
         );
