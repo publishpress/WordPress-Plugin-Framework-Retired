@@ -20,7 +20,8 @@
         var menu_found = false,
             interval,
             limit = 20,
-            i = 0;
+            i = 0,
+            self = this;
 
         interval = global.setInterval(
             function () {
@@ -36,7 +37,7 @@
                         if ($(this).find('a').attr('href') === href) {
                             // Check if the current menu links to the extensions page.
                             $(this).addClass('alledia-framework-highlight');
-                            $(this).addClass(this.plugin_name);
+                            $(this).addClass(self.plugin_name);
                             menu_found = true;
                         }
                     }
