@@ -53,5 +53,9 @@ class Container extends \Pimple\Container {
         $this['assets'] = function ( $c ) {
             return new Assets( $c );
         };
+
+        $this['reviews'] = function ( $c ) {
+            return new Reviews( $c );
+        };
     }
 }
