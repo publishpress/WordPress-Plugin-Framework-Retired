@@ -1,8 +1,8 @@
 <?php
 
-namespace AllediaFramework;
+namespace Allex;
 
-abstract class AbstractService {
+abstract class Abstract_Service {
     /**
      * @var Container
      */
@@ -16,4 +16,12 @@ abstract class AbstractService {
     public function __construct( Container $container ) {
         $this->container = $container;
     }
+
+    /**
+     * @return Container
+     */
+    public function get_container() {
+        return $this->container;
+    }
 }
+

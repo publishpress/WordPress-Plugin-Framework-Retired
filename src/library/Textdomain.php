@@ -1,8 +1,8 @@
 <?php
 
-namespace AllediaFramework;
+namespace Allex;
 
-class Text_Domain extends AbstractService {
+class Textdomain extends Abstract_Service {
     /**
      * @var string
      */
@@ -23,10 +23,10 @@ class Text_Domain extends AbstractService {
      * Load the framework's text domain.
      */
     public function load() {
-        $mo_file = __DIR__ . 'languages/alledia-framework-' . $this->locale . '.mo';
+        $mo_file = __DIR__ . 'languages/allex-' . $this->locale . '.mo';
 
         if ( file_exists( $mo_file ) ) {
-            load_textdomain( 'alledia-framework', $mo_file );
+            load_textdomain( 'allex', $mo_file );
         }
     }
 }

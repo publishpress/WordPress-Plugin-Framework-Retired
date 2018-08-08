@@ -1,8 +1,10 @@
 <?php
 
-namespace AllediaFramework;
+namespace Allex\Module;
 
-class Reviews extends AbstractService {
+use Allex\Container;
+
+class Reviews extends Abstract_Module {
     const REPEAT_INTERVAL = '+30 days';
 
     /**
@@ -58,7 +60,7 @@ class Reviews extends AbstractService {
      *
      * @param array $params
      */
-    public function check_review_notification( $params ) {
+    public function init( $params ) {
         $this->notice_text = esc_html( $params['notice_text'] );
         $this->review_link = $params['review_link'];
 
@@ -219,12 +221,12 @@ class Reviews extends AbstractService {
                 'no'   => admin_url( "?review_plugin={$this->plugin_name}&review_action=no" ),
             ],
             'labels'  => [
-                'ok'   => __( 'Ok, you deserved it', 'alledia-framework' ),
-                'done' => __( 'I already did', 'alledia-framework' ),
-                'no'   => __( 'No, not good enough for now', 'alledia-framework' ),
+                'ok'   => __( 'Ok, you deserved it', 'allex' ),
+                'done' => __( 'I already did', 'allex' ),
+                'no'   => __( 'No, not good enough for now', 'allex' ),
             ],
         ];
 
-        echo $this->twig->render( 'five_star_review.twig', $context );
+        echo $this->twig->render( 'notice_five_star_review.twig', $context );
     }
 }

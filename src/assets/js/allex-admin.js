@@ -36,7 +36,7 @@
                     if ($(this).find('a').length > 0) {
                         if ($(this).find('a').attr('href') === href) {
                             // Check if the current menu links to the extensions page.
-                            $(this).addClass('alledia-framework-highlight');
+                            $(this).addClass('allex-highlight');
                             $(this).addClass(self.plugin_name);
                             menu_found = true;
                         }
@@ -48,7 +48,7 @@
     };
 
     // Check if we already have the framework.
-    if (! global.Alledia_Framework) {
-        global.Alledia_Framework = Framework;
+    if (! global.Allex) {
+        global.Allex = Framework;
     }
 })(window, jQuery);

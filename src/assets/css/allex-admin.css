@@ -1,14 +1,14 @@
 /* Review notice */
-.alledia-framework-review-notice span.dashicons {
+.allex-review-notice span.dashicons {
     text-decoration: none !important;
     margin-right: 6px;
 }
 
-.alledia-framework-review-notice li {
+.allex-review-notice li {
     line-height: 17pt;
 }
 
 /* Highlighted text */
-.alledia-framework-highlight {
+.allex-highlight {
     font-weight: bold;
 }
