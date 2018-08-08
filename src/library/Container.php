@@ -14,12 +14,16 @@ class Container extends \Pimple\Container {
             return $values['PLUGIN_BASENAME'];
         };
 
+        $this['FRAMEWORK_BASE_PATH'] = function ( $c ) {
+            return realpath( __DIR__ . '/../' );
+        };
+
         $this['TWIG_PATH'] = function ( $c ) {
-            return __DIR__ . '/twig';
+            return $c['FRAMEWORK_BASE_PATH'] . '/twig';
         };
 
         $this['ASSETS_BASE_URL'] = function ( $c ) {
-            return get_site_url() . '/' . str_replace( ABSPATH, '', __DIR__ ) . '/assets';
+            return get_site_url() . '/' . str_replace( ABSPATH, '', $c['FRAMEWORK_BASE_PATH'] ) . '/assets';
         };
 
         $this['PLUGIN_NAME'] = function ( $c ) {
