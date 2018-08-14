@@ -2,6 +2,7 @@
 
 namespace Allex;
 
+use Allex\Module\Addons;
 use Allex\Module\Assets;
 use Allex\Module\Reviews;
 use Allex\Module\Upgrade;
@@ -124,6 +125,15 @@ class Container extends \Pimple\Container {
          */
         $this['module_reviews'] = function ( $c ) {
             return new Reviews( $c );
+        };
+
+        /**
+         * @param $c
+         *
+         * @return Addons
+         */
+        $this['module_addons'] = function ( $c ) {
+            return new Addons( $c );
         };
     }
 }
