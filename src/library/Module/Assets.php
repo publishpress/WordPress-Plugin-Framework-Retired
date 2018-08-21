@@ -65,10 +65,31 @@ class Assets extends Abstract_Module {
 	 * Enqueue scripts for the admin UI.
 	 */
 	public function admin_enqueue_scripts() {
+		$react_env = defined('WP_DEBUG') && WP_DEBUG ? 'development' : 'production.min';
+		wp_enqueue_script(
+			'allex-react',
+			"{$this->assets_base_url}/lib/react-v16.4.2/react.{$react_env}.js",
+			[],
+			$this->version
+		);
+		wp_enqueue_script(
+			'allex-react-dom',
+			"{$this->assets_base_url}/lib/react-v16.4.2/react-dom.{$react_env}.js",
+			[ 'allex-react' ],
+			$this->version
+		);
+		wp_enqueue_script(
+			'allex-admin-addons',
+			"{$this->assets_base_url}/js/admin-addons.min.js",
+			[ 'jquery', 'allex-react', 'allex-react-dom' ],
+			$this->version
+		);
+
+
 		wp_enqueue_script(
 			'allex',
 			$this->assets_base_url . '/js/allex-admin.js',
-			[ 'jquery' ],
+			[ 'jquery', 'allex-react' ],
 			$this->version
 		);
 

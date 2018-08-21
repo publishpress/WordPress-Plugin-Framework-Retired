@@ -19,7 +19,7 @@
   ],
   "require": {
     "php": ">=5.6",
-    "twig/twig": "~1.0",
+    "twig/twig": "~1.20",
     "pimple/pimple": "~3.0",
     "alledia/wordpress-edd-license-integration": "*"
   },
