@@ -55,7 +55,7 @@ class Assets extends Abstract_Module {
 
 		wp_enqueue_style(
 			'allex-font-awesome',
-			$this->assets_base_url . '/lib/font-awesome/v5.2.0/css/all.min.css',
+			$this->assets_base_url . '/lib/font-awesome-v5.2.0/css/all.min.css',
 			[],
 			$this->version
 		);
