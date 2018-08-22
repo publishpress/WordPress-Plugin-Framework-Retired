@@ -1,7 +1,7 @@
 {
   "name": "alledia/wordpress-plugin-framework",
   "type": "library",
-  "description": "Alledia framework for building WordPress plugins.",
+  "description": "Alledia framework for creating WordPress plugins.",
   "keywords": ["wordpress", "plugin", "framework"],
   "license": "GPL-2.0-or-later",
   "authors": [
