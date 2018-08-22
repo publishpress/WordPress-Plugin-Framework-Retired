@@ -27,10 +27,5 @@
     "psr-4": {
       "Allex\\": "src/library"
     }
-  },
-  "extra": {
-    "branch-alias": {
-      "development": "0.1.0"
-    }
   }
 }
