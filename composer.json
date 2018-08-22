@@ -21,7 +21,7 @@
     "php": ">=5.6",
     "twig/twig": "~1.20",
     "pimple/pimple": "~3.0",
-    "alledia/wordpress-edd-license-integration": "*"
+    "alledia/wordpress-edd-license-integration": "~2.2"
   },
   "autoload": {
     "psr-4": {
