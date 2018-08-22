@@ -27,5 +27,7 @@
     "psr-4": {
       "Allex\\": "src/library"
     }
-  }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }

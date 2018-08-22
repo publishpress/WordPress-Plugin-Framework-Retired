@@ -4,15 +4,24 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "9d4b0ab8e3120070abb56e38e077d13d",
+    "content-hash": "d7463005694f6e8dc57213fcbabb84fe",
     "packages": [
         {
             "name": "alledia/edd-license-handler",
-            "version": "1.6.14.5",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/AllediaWordPress/Alledia-EDD-License-handler",
-                "reference": "5378b6c37dc4bdc315aec1ebbae47ec4c6f179d3"
+                "url": "https://github.com/AllediaWordPress/Alledia-EDD-License-Handler.git",
+                "reference": "35eeaf07ed5d193183fd0b899cba099868ba7b53"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/AllediaWordPress/Alledia-EDD-License-Handler/zipball/35eeaf07ed5d193183fd0b899cba099868ba7b53",
+                "reference": "35eeaf07ed5d193183fd0b899cba099868ba7b53",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
             },
             "type": "library",
             "autoload": {
@@ -21,8 +30,9 @@
                     "EDD_SL_Plugin_Updater.php"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "GPL-2"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
@@ -32,20 +42,37 @@
                 {
                     "name": "PublishPress",
                     "email": "help@publishpress.com"
+                },
+                {
+                    "name": "Alledia",
+                    "email": "help@alledia.com"
                 }
             ],
-            "time": "2018-08-17T20:21:11+00:00"
+            "description": "EDD License Handler for WordPress Plugins",
+            "keywords": [
+                "edd",
+                "license",
+                "wordpress"
+            ],
+            "time": "2018-08-22T16:02:50+00:00"
         },
         {
             "name": "alledia/wordpress-edd-license-integration",
-            "version": "2.2.3",
+            "version": "dev-development",
             "source": {
                 "type": "git",
-                "url": "https://github.com/AllediaWordPress/WordPress-EDD-License-Integration",
-                "reference": "c392cfc627e523479234592bbc4649093bbea6b5"
+                "url": "https://github.com/AllediaWordPress/WordPress-EDD-License-Integration.git",
+                "reference": "c7d9a624fcb23dd2b7d89a7b8fca92866d544dc1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/AllediaWordPress/WordPress-EDD-License-Integration/zipball/c7d9a624fcb23dd2b7d89a7b8fca92866d544dc1",
+                "reference": "c7d9a624fcb23dd2b7d89a7b8fca92866d544dc1",
+                "shasum": ""
             },
             "require": {
-                "alledia/edd-license-handler": "~1.6",
+                "alledia/edd-license-handler": "dev-master",
+                "php": ">=5.4.0",
                 "pimple/pimple": "~3.2"
             },
             "type": "library",
@@ -54,16 +81,33 @@
                     "PublishPress\\EDD_License\\Core\\": "src/core/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "GPL-2"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
                     "name": "PublishPress",
                     "email": "help@publishpress.com"
+                },
+                {
+                    "name": "Alledia",
+                    "email": "help@alledia.com"
+                },
+                {
+                    "name": "Anderson Grudtner Martins",
+                    "email": "anderson@grudtner.me",
+                    "homepage": "http://anderson.grudtner.me",
+                    "role": "Lead Developer"
                 }
             ],
-            "time": "2018-08-17T20:25:41+00:00"
+            "description": "EDD license integration library for WordPress plugins",
+            "keywords": [
+                "edd",
+                "license",
+                "wordpress"
+            ],
+            "time": "2018-08-22T16:27:13+00:00"
         },
         {
             "name": "pimple/pimple",
@@ -291,9 +335,11 @@
     ],
     "packages-dev": [],
     "aliases": [],
-    "minimum-stability": "stable",
-    "stability-flags": [],
-    "prefer-stable": false,
+    "minimum-stability": "dev",
+    "stability-flags": {
+        "alledia/wordpress-edd-license-integration": 20
+    },
+    "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": ">=5.6"
