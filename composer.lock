@@ -4,18 +4,49 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "52f3010f75476496ed565cb5f8fd151b",
+    "content-hash": "9d4b0ab8e3120070abb56e38e077d13d",
     "packages": [
         {
+            "name": "alledia/edd-license-handler",
+            "version": "1.6.14.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/AllediaWordPress/Alledia-EDD-License-handler",
+                "reference": "5378b6c37dc4bdc315aec1ebbae47ec4c6f179d3"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "EDD_License_Handler.php",
+                    "EDD_SL_Plugin_Updater.php"
+                ]
+            },
+            "license": [
+                "GPL-2"
+            ],
+            "authors": [
+                {
+                    "name": "EasyDigitalDownloads",
+                    "email": "contact@easydigitaldownloads.com"
+                },
+                {
+                    "name": "PublishPress",
+                    "email": "help@publishpress.com"
+                }
+            ],
+            "time": "2018-08-17T20:21:11+00:00"
+        },
+        {
             "name": "alledia/wordpress-edd-license-integration",
-            "version": "2.0.1",
+            "version": "2.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/AllediaWordPress/WordPress-EDD-License-Integration",
-                "reference": "c1bea74ab83f430cc7bdc08275ba958f69a5cfc0"
+                "reference": "c392cfc627e523479234592bbc4649093bbea6b5"
             },
-            "require-dev": {
-                "lucatume/wp-browser": "^1.22"
+            "require": {
+                "alledia/edd-license-handler": "~1.6",
+                "pimple/pimple": "~3.2"
             },
             "type": "library",
             "autoload": {
@@ -32,7 +63,7 @@
                     "email": "help@publishpress.com"
                 }
             ],
-            "time": "2018-02-06T11:53:24+00:00"
+            "time": "2018-08-17T20:25:41+00:00"
         },
         {
             "name": "pimple/pimple",

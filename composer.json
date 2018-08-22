@@ -1,27 +1,27 @@
 {
   "name": "alledia/plugin-framework",
   "type": "library",
-  "description": "Alledia framework for building plugins.",
-  "license": "GPL v2",
+  "description": "Alledia framework for building WordPress plugins.",
+  "keywords": ["wordpress", "plugin", "framework"],
+  "license": "GPL-2.0-or-later",
   "authors": [
     {
       "name": "Alledia",
       "email": "help@alledia.com",
       "homepage": "https://alledia.com",
-      "role": "Lead Developer"
-    }
-  ],
-  "repositories": [
+    },
     {
-      "type": "git",
-      "url": "https://github.com/AllediaWordPress/WordPress-EDD-License-Integration"
+      "name": "Anderson Grudtner Martins",
+      "email": "anderson@grudtner.me",
+      "homepage": "http://anderson.grudtner.me",
+      "role": "Lead Developer"
     }
   ],
   "require": {
     "php": ">=5.6",
     "twig/twig": "~1.20",
     "pimple/pimple": "~3.0",
-    "alledia/wordpress-edd-license-integration": "~2.2"
+    "alledia/wordpress-edd-license-integration": "dev-development"
   },
   "autoload": {
     "psr-4": {
