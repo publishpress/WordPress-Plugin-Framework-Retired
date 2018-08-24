@@ -81,9 +81,17 @@ class Container extends \Pimple\Container {
 		 * @return mixed
 		 */
 		$this['PLUGIN_TITLE'] = function ( $c ) {
-			$data = get_plugin_data( ABSPATH . '/wp-content/plugins/' . $c['PLUGIN_BASENAME'] );
+			if ( is_admin() ) {
+				if ( ! function_exists( 'get_plugin_data' ) ) {
+					require_once ABSPATH . '/wp-admin/includes/plugin.php';
+				}
 
-			return $data['Name'];
+				$data = get_plugin_data( ABSPATH . '/wp-content/plugins/' . $c['PLUGIN_BASENAME'] );
+
+				return $data['Name'];
+			}
+
+			return $c['PLUGIN_NAME'];
 		};
 
 		/**
