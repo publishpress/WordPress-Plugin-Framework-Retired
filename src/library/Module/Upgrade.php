@@ -135,9 +135,8 @@ class Upgrade extends Abstract_Module {
 		}
 
 		// Check if we have all add-ons installed. If so, we do not show the sidebar.
-		$addons           = apply_filters( 'allex_addons', [], $this->plugin_name );
 		$addons_installed = apply_filters( 'allex_installed_addons', [], $this->plugin_name );
 
-		return count( $addons ) > count( $addons_installed );
+		return count( $addons_installed ) === 0;
 	}
 }
