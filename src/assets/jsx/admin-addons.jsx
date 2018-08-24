@@ -41,22 +41,24 @@ class AllexAddonsTabs extends React.Component {
         return (
             <div className="nav-tab-wrapper">
                 {this.props.addonsCount > 0 ? (
-                    <a href="#"
-                       className={this.state.currentTab == 'installed' ? 'nav-tab nav-tab-active' : 'nav-tab'}
-                       data-tab="installed"
-                       onClick={this.handleClick}>
+                    <div>
+                        <a href="#"
+                           className={this.state.currentTab == 'installed' ? 'nav-tab nav-tab-active' : 'nav-tab'}
+                           data-tab="installed"
+                           onClick={this.handleClick}>
 
-                        {allexContext.labels.installed}
-                    </a>
+                            {allexContext.labels.installed}
+                        </a>
+
+                        <a href="#"
+                           className={this.state.currentTab == 'missed' ? 'nav-tab nav-tab-active' : 'nav-tab'}
+                           data-tab="missed"
+                           onClick={this.handleClick}>
+
+                            {allexContext.labels.browse_more}
+                        </a>
+                    </div>
                 ) : (null)}
-
-                <a href="#"
-                   className={this.state.currentTab == 'missed' ? 'nav-tab nav-tab-active' : 'nav-tab'}
-                   data-tab="missed"
-                   onClick={this.handleClick}>
-
-                    {allexContext.labels.browse_more}
-                </a>
             </div>
         );
     }
