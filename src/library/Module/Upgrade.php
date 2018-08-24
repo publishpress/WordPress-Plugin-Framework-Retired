@@ -59,6 +59,8 @@ class Upgrade extends Abstract_Module {
 
 	/**
 	 * @param array $links
+	 *
+	 * @return array
 	 */
 	public function plugin_action_links( $links ) {
 		$context = [
