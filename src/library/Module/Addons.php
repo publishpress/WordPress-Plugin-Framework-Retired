@@ -86,6 +86,9 @@ class Addons extends Abstract_Module {
 	protected function add_hooks() {
 		add_action( 'allex_echo_addons_page', [ $this, 'echo_addons_page' ], 10 );
 		add_action( 'wp_ajax_allex_addon_license_validate', [ $this, 'ajax_validate_license_key' ] );
+
+		add_filter( 'allex_addons', [ $this, 'filter_allex_addons_append_data' ], 999998, 2 );
+		add_filter( 'allex_installed_addons', [ $this, 'filter_allex_installed_addons' ], 999999, 2 );
 	}
 
 	/**
@@ -106,11 +109,7 @@ class Addons extends Abstract_Module {
 		 *          ],
 		 *     ],
 		 */
-		$addons = apply_filters( 'allex_addons', $this->plugin_name, [] );
-
-		$this->set_addons_state( $addons );
-
-		$this->check_addons_license( $addons );
+		$addons = apply_filters( 'allex_addons', [], $this->plugin_name, false );
 
 		// Cache the add-ons list.
 		$this->addons = $addons;
@@ -142,6 +141,22 @@ class Addons extends Abstract_Module {
 		];
 
 		echo $this->twig->render( 'addons_list.twig', $context );
+	}
+
+	/**
+	 * Append add-ons' state and license info to the add-ons array.
+	 *
+	 * @param $addons
+	 * @param $plugin_name
+	 *
+	 * @return mixed
+	 */
+	public function filter_allex_addons_append_data( $addons, $plugin_name ) {
+
+		$this->set_addons_state( $addons );
+		$this->check_addons_license( $addons );
+
+		return $addons;
 	}
 
 	/**
@@ -183,7 +198,6 @@ class Addons extends Abstract_Module {
 		return is_plugin_active( "{$plugin_name}/{$plugin_name}.php" );
 	}
 
-
 	/**
 	 * @param array $addons
 	 */
@@ -203,6 +217,27 @@ class Addons extends Abstract_Module {
 			$addon['license_key']    = apply_filters( 'allex_addons_get_license_key', $addon['license_key'],
 				$addon['slug'] );
 		}
+	}
+
+	/**
+	 * Filter the list of add-ons by state.
+	 *
+	 * @param $addons
+	 * @param $plugin_name
+	 *
+	 * @return mixed
+	 */
+	public function filter_allex_installed_addons( $addons, $plugin_name ) {
+
+		$addons = apply_filters( 'allex_addons', [], $plugin_name );
+
+		foreach ( $addons as $addon_slug => $addon ) {
+			if ( ! $addon['is_installed'] ) {
+				unset( $addons[ $addon_slug ] );
+			}
+		}
+
+		return $addons;
 	}
 
 	/**

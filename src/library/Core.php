@@ -45,9 +45,10 @@ class Core {
 	 * @param string $plugin_base_name
 	 * @param string $edd_api_url
 	 * @param string $plugin_author
+	 * @param string $subscription_ad_url
 	 */
-	public function __construct( $plugin_base_name, $edd_api_url, $plugin_author ) {
-		$this->init_container( $plugin_base_name, $edd_api_url, $plugin_author );
+	public function __construct( $plugin_base_name, $edd_api_url, $plugin_author, $subscription_ad_url ) {
+		$this->init_container( $plugin_base_name, $edd_api_url, $plugin_author, $subscription_ad_url );
 
 		$this->textdomain     = $this->get_service( 'textdomain' );
 		$this->module_reviews = $this->get_service( 'module_reviews' );
@@ -60,12 +61,14 @@ class Core {
 	 * @param string $plugin_base_name
 	 * @param string $edd_api_url
 	 * @param string $plugin_author
+	 * @param string $subscription_ad_url
 	 */
-	protected function init_container( $plugin_base_name, $edd_api_url, $plugin_author ) {
+	protected function init_container( $plugin_base_name, $edd_api_url, $plugin_author, $subscription_ad_url ) {
 		$this->container = new Container( [
-			'PLUGIN_BASENAME' => $plugin_base_name,
-			'EDD_API_URL'     => $edd_api_url,
-			'PLUGIN_AUTHOR'   => $plugin_author,
+			'PLUGIN_BASENAME'     => $plugin_base_name,
+			'EDD_API_URL'         => $edd_api_url,
+			'PLUGIN_AUTHOR'       => $plugin_author,
+			'SUBSCRIPTION_AD_URL' => $subscription_ad_url,
 		] );
 
 		return $this->container;

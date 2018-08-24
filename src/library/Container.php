@@ -32,6 +32,16 @@ class Container extends \Pimple\Container {
 		/**
 		 * @param $c
 		 *
+		 * @return mixed
+		 */
+		$this['SUBSCRIPTION_AD_URL'] = function ( $c ) use ( $values ) {
+			return $values['SUBSCRIPTION_AD_URL'];
+		};
+
+
+		/**
+		 * @param $c
+		 *
 		 * @return bool|string
 		 */
 		$this['FRAMEWORK_BASE_PATH'] = function ( $c ) {
@@ -63,6 +73,17 @@ class Container extends \Pimple\Container {
 		 */
 		$this['PLUGIN_NAME'] = function ( $c ) {
 			return str_replace( '.php', '', basename( $c['PLUGIN_BASENAME'] ) );
+		};
+
+		/**
+		 * @param $c
+		 *
+		 * @return mixed
+		 */
+		$this['PLUGIN_TITLE'] = function ( $c ) {
+			$data = get_plugin_data( ABSPATH . '/wp-content/plugins/' . $c['PLUGIN_BASENAME'] );
+
+			return $data['Name'];
 		};
 
 		/**

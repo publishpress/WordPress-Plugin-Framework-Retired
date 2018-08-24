@@ -224,3 +224,42 @@
         transform: rotate(360deg);
     }
 }
+
+/* Subscription form */
+#allex_subscription_ad {
+    background: #fff;
+    margin-left: 25px;
+}
+
+#allex_subscription_ad img {
+    width: 100%;
+}
+
+#allex_subscription_ad .content {
+    padding: 15px;
+}
+
+form input:invalid,
+form select:invalid,
+form textarea:invalid,
+#allex_subscription_ad .content .error {
+    border: 1px solid #ff606c;
+    background: #f6dbdc;
+}
+
+#allex_subscription_ad .content input {
+    width: 100%;
+    font-size: 14px;
+    max-width: 100%;
+    padding: 5px;
+}
+
+#allex_subscription_ad .content button {
+    margin-top: 20px;
+    width: 100%;
+    text-align: center;
+}
+
+#allex_subscription_ad .control-group {
+    margin-top: 10px;
+}
