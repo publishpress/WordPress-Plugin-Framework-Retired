@@ -11,9 +11,6 @@
          */
         var Framework = function (plugin_name) {
             this.plugin_name = plugin_name;
-
-            init_tabs(this.plugin_name);
-            init_activate_buttons(this.plugin_name);
         };
 
         /**
@@ -54,37 +51,6 @@
         };
 
         /**
-         * Add hooks to the add-ons page.
-         *
-         * @param string plugin_name
-         */
-        var init_tabs = function (plugin_name) {
-            var wrapper = $('#allex-addons-wrapper.' + plugin_name);
-
-            // Abort if the wrapper is not found.
-            if (wrapper.length === 0) {
-                return;
-            }
-
-            // Main tabs.
-            $('a.nav-tab', wrapper).on('click', function (e) {
-                e.preventDefault();
-
-                var $self = $(this);
-
-                // Deactive the active container.
-                $('.container.active', wrapper).removeClass('active');
-                // Deactive the active tab.
-                $('.nav-tab-active', wrapper).removeClass('nav-tab-active');
-
-                // Activate the correct tab container.
-                $('#allex-addons-' + $self.data('tab')).addClass('active');
-                // Activate the active tab.
-                $(this).addClass('nav-tab-active');
-            });
-        };
-
-        /**
          * Initiate the activate license buttons.
          *
          * @param string plugin_name
@@ -122,7 +88,7 @@
                 // If no license key, move focus to the field.
                 if (license_key_field.val().length === 0) {
                     license_key_field.focus();
-                    show_message(allex_config.labels.empty_license);
+                    show_message(allexContext.labels.empty_license);
                     return;
                 }
 
@@ -139,13 +105,13 @@
                     beforeSend: function (jqXHR, settings) {
                         $self.attr('disabled', 'disabled');
                         license_key_field.attr('disabled', 'disabled');
-                        button.text(allex_config.labels.please_wait);
+                        button.text(allexContext.labels.please_wait);
                         button.after(loader);
                         hide_message();
                     },
                     success: function (response, textStatus, jqXHR) {
                         loader.remove();
-                        button.text(allex_config.labels.activate);
+                        button.text(allexContext.labels.activate);
                         button.attr('disabled', false);
                         license_key_field.attr('disabled', false);
 
@@ -172,36 +138,15 @@
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         loader.remove();
-                        button.text(allex_config.labels.activate);
+                        button.text(allexContext.labels.activate);
                         button.attr('disabled', false);
                         license_key_field.attr('disabled', false);
 
-                        show_message(errorThrown + '<br>' + allex_config.labels.contact_support);
+                        show_message(errorThrown + '<br>' + allexContext.labels.contact_support);
 
                         license_key_field.attr('disabled', false);
                     }
                 });
-            });
-
-            $('.allex-license .allex-license-change').on('click', function (e) {
-                e.preventDefault();
-
-                var $self = $(this);
-
-                var wrapper = $($self.parents('article[data-addon_name]'));
-                var license_key_field = $('input', wrapper);
-                var license_key = $('.allex-license-key code', wrapper);
-                var button = $(this);
-                var message = $('.allex-message', wrapper);
-                var status = $('allex-license-status', wrapper);
-
-                // Hide the current license key.
-                button.parent().addClass('allex-hidden');
-                // Show the fields again.
-                license_key_field.parent().removeClass('allex-hidden');
-                license_key_field.val(license_key.text());
-                status.text('');
-                message.text('');
             });
         };
 

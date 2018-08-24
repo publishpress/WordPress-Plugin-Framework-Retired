@@ -43,9 +43,11 @@ class Core {
 	 * Core constructor.
 	 *
 	 * @param string $plugin_base_name
+	 * @param string $edd_api_url
+	 * @param string $plugin_author
 	 */
-	public function __construct( $plugin_base_name ) {
-		$this->init_container( $plugin_base_name );
+	public function __construct( $plugin_base_name, $edd_api_url, $plugin_author ) {
+		$this->init_container( $plugin_base_name, $edd_api_url, $plugin_author );
 
 		$this->textdomain     = $this->get_service( 'textdomain' );
 		$this->module_reviews = $this->get_service( 'module_reviews' );
@@ -55,10 +57,16 @@ class Core {
 	}
 
 	/**
-	 * @param $plugin_base_name
+	 * @param string $plugin_base_name
+	 * @param string $edd_api_url
+	 * @param string $plugin_author
 	 */
-	protected function init_container( $plugin_base_name ) {
-		$this->container = new Container( [ 'PLUGIN_BASENAME' => $plugin_base_name ] );
+	protected function init_container( $plugin_base_name, $edd_api_url, $plugin_author ) {
+		$this->container = new Container( [
+			'PLUGIN_BASENAME' => $plugin_base_name,
+			'EDD_API_URL'     => $edd_api_url,
+			'PLUGIN_AUTHOR'   => $plugin_author,
+		] );
 
 		return $this->container;
 	}

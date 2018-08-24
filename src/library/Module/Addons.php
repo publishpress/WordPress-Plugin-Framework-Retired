@@ -6,6 +6,16 @@ use Allex\Container;
 
 class Addons extends Abstract_Module {
 	/**
+	 * Constant for valid status
+	 */
+	const LICENSE_STATUS_VALID = 'valid';
+
+	/**
+	 * Constant for invalid status
+	 */
+	const LICENSE_STATUS_INVALID = 'invalid';
+
+	/**
 	 * @var string
 	 */
 	protected $plugin_basename;
@@ -31,6 +41,16 @@ class Addons extends Abstract_Module {
 	protected $addons;
 
 	/**
+	 * @var string
+	 */
+	protected $edd_api_url;
+
+	/**
+	 * @var string
+	 */
+	protected $plugin_author;
+
+	/**
 	 * Upgrade constructor.
 	 *
 	 * @param Container $container
@@ -42,6 +62,8 @@ class Addons extends Abstract_Module {
 		$this->plugin_name     = $this->container['PLUGIN_NAME'];
 		$this->plugin_dir_path = $this->get_plugins_dir_path();
 		$this->twig            = $this->container['twig'];
+		$this->edd_api_url     = $this->container['EDD_API_URL'];
+		$this->plugin_author   = $this->container['PLUGIN_NAME'];
 	}
 
 	/**
@@ -80,13 +102,13 @@ class Addons extends Abstract_Module {
 		 *              'slug'        => '',
 		 *              'title'       => '',
 		 *              'description' => '',
-		 *              'icon'        => '',
+		 *              'icon_class'  => '',
 		 *          ],
 		 *     ],
 		 */
 		$addons = apply_filters( 'allex_addons', $this->plugin_name, [] );
 
-		$count = $this->split_addons_by_state( $addons );
+		$this->set_addons_state( $addons );
 
 		$this->check_addons_license( $addons );
 
@@ -94,9 +116,9 @@ class Addons extends Abstract_Module {
 		$this->addons = $addons;
 
 		$context = [
-			'addons_page_url' => $addons_page_url,
+			'browse_more_url' => $addons_page_url,
 			'addons'          => $addons,
-			'count_addons'    => $count,
+			'count_addons'    => count( $addons ),
 			'plugin_name'     => $this->plugin_name,
 			'nonce'           => wp_create_nonce( 'allex_activate_license' ),
 			'labels'          => [
@@ -114,41 +136,24 @@ class Addons extends Abstract_Module {
 	}
 
 	/**
-	 * Split the $addons array into a multidimensional array which indexes
-	 * specify the current state of the plugins. It returns the total of
-	 * add-ons.
+	 * Set the a property "is_installed" and "is_active" according to the current state of the add-on.
 	 *
 	 * @param array $addons
-	 *
-	 * @return integer
 	 */
-	protected function split_addons_by_state( &$addons ) {
-		$new_list = [
-			'missed '   => [],
-			'installed' => [],
-		];
-
-		$count = 0;
-
+	protected function set_addons_state( &$addons ) {
 		if ( ! empty( $addons ) ) {
 			foreach ( $addons as &$addon ) {
-				$index = 'missed';
+				$is_installed = $this->is_plugin_installed( $addon['slug'] );
+				$is_active    = false;
 
-				if ( $this->is_plugin_installed( $addon['slug'] ) ) {
-					$index = 'installed';
-
-					$addon['active'] = $this->is_plugin_active( $addon['slug'] );
+				if ( $is_installed ) {
+					$is_active = $this->is_plugin_active( $addon['slug'] );
 				}
 
-				$new_list[ $index ][] = $addon;
-
-				$count ++;
+				$addon['is_installed'] = $is_installed;
+				$addon['is_active']    = $is_active;
 			}
 		}
-
-		$addons = $new_list;
-
-		return $count;
 	}
 
 	/**
@@ -171,7 +176,7 @@ class Addons extends Abstract_Module {
 
 
 	/**
-	 * @param $addons
+	 * @param array $addons
 	 */
 	protected function check_addons_license( &$addons ) {
 		if ( empty( $addons ) ) {
@@ -179,8 +184,13 @@ class Addons extends Abstract_Module {
 		}
 
 		foreach ( $addons as &$addon ) {
-			$addon['license_status'] = 'inactive';
-			$addon['license_key']    = '';
+			$addon_name              = str_replace( '-', '_', $addon['slug'] );
+			$addon['license_status'] = get_option( "{$addon_name}_license_status", self::LICENSE_STATUS_INVALID );
+			$addon['license_key']    = get_option( "{$addon_name}_license_key" );
+
+			// Applies filters to the license key and status.
+			$addon['license_status'] = apply_filters( 'allex_addons_get_license_status', $addon['license_status'], $addon['slug'] );
+			$addon['license_key'] = apply_filters( 'allex_addons_get_license_key', $addon['license_key'], $addon['slug'] );
 		}
 	}
 
@@ -197,7 +207,7 @@ class Addons extends Abstract_Module {
 		 *              'slug'        => '',
 		 *              'title'       => '',
 		 *              'description' => '',
-		 *              'icon'        => '',
+		 *              'icon_class'  => '',
 		 *          ],
 		 *     ],
 		 */
@@ -206,7 +216,7 @@ class Addons extends Abstract_Module {
 		$response = [
 			'success'        => false,
 			'message'        => '',
-			'license_status' => '',
+			'license_status' => self::LICENSE_STATUS_INVALID,
 			'license_key'    => '',
 		];
 
@@ -228,9 +238,14 @@ class Addons extends Abstract_Module {
 				throw new \Exception( __( 'Invalid plugin name.', 'allex' ) );
 			}
 
-			$addon_name = sanitize_text_field( trim( $_POST['addon_name'] ) );
-			if ( empty( $addon_name ) ) {
+			$addon_slug = sanitize_text_field( trim( $_POST['addon_name'] ) );
+			if ( empty( $addon_slug ) ) {
 				throw new \Exception( __( 'Invalid addon name.', 'allex' ) );
+			}
+
+			$addon_edd_id = sanitize_text_field( trim( $_POST['addon_edd_id'] ) );
+			if ( empty( $addon_edd_id ) ) {
+				throw new \Exception( __( 'Invalid addon EDD ID.', 'allex' ) );
 			}
 
 			$license_key = sanitize_text_field( trim( $_POST['key'] ) );
@@ -238,17 +253,83 @@ class Addons extends Abstract_Module {
 				throw new \Exception( __( 'Invalid license key.', 'allex' ) );
 			}
 
+			// Check if it is a valid add-on.
 			if ( empty( $addons ) ) {
 				throw new \Exception( __( "Invalid add-on.", 'allex' ) );
 			}
 
-			if ( ! array_key_exists( $addon_name, $addons ) ) {
+			if ( ! array_key_exists( $addon_slug, $addons ) ) {
 				throw new \Exception( __( 'Invalid addon name.', 'allex' ) );
 			}
 
-			$response['message'] = 'Ok!';
-			$response['success'] = true;
+			// The default status.
+			$license_new_status = self::LICENSE_STATUS_INVALID;
+
+			// Make the request.
+			$edd_response = wp_remote_post(
+				$this->edd_api_url,
+				[
+					'timeout'   => 30,
+					'sslverify' => true,
+					'body'      => [
+						'edd_action' => "activate_license",
+						'license'    => $license_key,
+						'item_id'    => $addon_edd_id,
+						'url'        => 'https://mytets.com',
+					],
+				]
+			);
+
 			$response['license_key'] = $license_key;
+
+			// Is the response an error?
+			if ( is_wp_error( $edd_response ) || 200 !== wp_remote_retrieve_response_code( $edd_response ) ) {
+				$message = $edd_response->get_error_message();
+
+				if ( empty( $message ) ) {
+					throw new \Exception( __( 'An error occurred. Please, try again or contact the support team.',
+						'allex' ) );
+				}
+
+				throw new \Exception( $message, 'allex' );
+			}
+
+			// Convert data response to an object.
+			$data = json_decode( wp_remote_retrieve_body( $edd_response ) );
+
+			// Do we have empty data? Throw an error.
+			if ( empty( $data ) || ! is_object( $data ) ) {
+				throw new \Exception( __( 'An error occurred. Please, try again or contact the support team.',
+					'allex' ) );
+			}
+
+			$response['success'] = true;
+
+			$addon_name = str_replace( '-', '_', $addon_slug );
+
+			// Deal with invalid licenses.
+			if ( ! $data->success && $data->license === self::LICENSE_STATUS_INVALID ) {
+				if ( isset( $data->error ) && ! empty( $data->error ) ) {
+					$response['license_status'] = $data->error;
+
+					update_option( "{$addon_name}_license_key", $license_key );
+					update_option( "{$addon_name}_license_status", $data->error );
+
+					do_action( 'allex_addon_update_license', $plugin_name, $addon_slug, $license_key, $data->error );
+				}
+			}
+
+			// Deal with valid licenses.
+			if ( $data->success && $data->license === self::LICENSE_STATUS_VALID ) {
+				$response['license_status'] = static::LICENSE_STATUS_VALID;
+
+				// Store the license key and status.
+				update_option( "{$addon_name}_license_key", $license_key );
+				update_option( "{$addon_name}_license_status", static::LICENSE_STATUS_VALID );
+
+				do_action( 'allex_addon_update_license', $plugin_name, $addon_slug, $license_key,
+					static::LICENSE_STATUS_VALID );
+			}
 		} catch ( \Exception $e ) {
 			$response['message'] = $e->getMessage();
 		}

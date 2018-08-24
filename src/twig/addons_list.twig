@@ -1,117 +1,39 @@
-<div id="allex-addons-container">
+<div id="allex-addons-container"></div>
 
-</div>
+<script type="application/javascript">
+    jQuery(function ($) {
+        var addons = [];
 
-<div id="allex-addons-wrapper" class="{{ plugin_name }}">
-    {# ######################################################################
-     # Tabs
-     ###################################################################### #}
+        // Build the list of addons. Twig can't just output it.
+        {% for addon in addons %}
+        addons.push(
+            {
+                'slug': '{{ addon.slug }}',
+                'title': '{{ addon.title }}',
+                'description': '{{ addon.description }}',
+                'iconClass': '{{ addon.icon_class }}',
+                'isInstalled': {{ addon.is_installed ? 'true' : 'false' }},
+                'isActive': {{ addon.is_active ? 'true' : 'false' }},
+                'licenseKey': '{{ addon.license_key }}',
+                'licenseStatus': '{{ addon.license_status }}',
+                'eddId': '{{ addon.edd_id }}',
+            }
+        );
+        {% endfor %}
 
-    <h2 class="nav-tab-wrapper">
-        {% if count_addons > 0 %}
-            <a href="#"
-               class="nav-tab nav-tab-active"
-               data-tab="installed">
-                {{ labels.installed }}
-            </a>
-        {% endif %}
-
-        <a href="#"
-           class="nav-tab{{ count_addons == 0 ? ' nav-tab-active' : '' }}"
-           data-tab="missed">
-            {{ labels.browse_more }}
-        </a>
-    </h2>
-
-
-    {# ######################################################################
-     # Installed add-ons
-     ###################################################################### #}
-
-    {% if count_addons > 0 %}
-        <section id="allex-addons-installed" class="container active">
-            {% for addon in addons.installed %}
-                {% if addon.slug %}
-                    <article data-addon_name="{{ addon.slug }}">
-
-                        <header>
-                            <i class="{{ addon.icon_class }}"></i>
-                        </header>
-
-                        <div class="body">
-                            <h3 class="u-title">{{ addon.title }}</h3>
-                            <p class="u-description">{{ addon.description }}</p>
-
-                            <div class="allex-license">
-                                <div class="allex-license-fields{{ addon.license_status != 'valid' ? '' : ' allex-hidden' }}">
-                                    <input
-                                            type="text"
-                                            size="40"
-                                            placeholder="{{ labels.enter_license_key }}"
-                                            maxlength="32"
-                                            autocomplete="false"
-                                            value="{{ addon.license_key }}"/>
-
-                                    <button
-                                            type="button"
-                                            class="button activate">
-                                        {{ labels.activate }}
-                                    </button>
-                                </div>
-
-                                <div class="allex-license-key{{ addon.license_status == 'valid' ? '' : ' allex-hidden' }}">
-                                    <label>{{ labels.license_key }}</label>&nbsp;
-                                    <code>{{ addon.license_key }}</code> - <a href="#" class="allex-license-change">{{ labels.change }}</a>
-                                </div>
-                            </div>
-
-                            <div class="allex-license-status">
-
-                            </div>
-
-                            <div class="allex-message allex-hidden"></div>
-
-                        </div>
-
-                    </article>
-                {% endif %}
-            {% endfor %}
-
-            <input type="hidden" id="allex-addons-nonce" value="{{ nonce }}"/>
-            <input type="hidden" id="allex-plugin-name" value="{{ plugin_name }}"/>
-        </section>
-
-    {% endif %}
-
-    {# ######################################################################
-     # Missed add-ons
-     ###################################################################### #}
-
-    {% if addons.missed %}
-        <section id="allex-addons-missed" class="container{{ count_addons == 0 ? ' active' : '' }}">
-            <div id="get-plugins-message">
-                <a href="{{ addons_page_url }}" class="button button-primary" target="_blank">{{ labels.get_plugins }}</a>
-            </div>
-
-            <div class="grid">
-                {% for addon in addons.missed %}
-                    {% if addon.slug %}
-                        <article data-id="{{ addon.slug }}">
-
-                            <header>
-                                <i class="{{ addon.icon_class }}"></i>
-                            </header>
-
-                            <div class="body">
-                                <h3 class="u-title">{{ addon.title }}</h3>
-                                <p class="u-description">{{ addon.description }}</p>
-                            </div>
-
-                        </article>
-                    {% endif %}
-                {% endfor %}
-            </div>
-        </section>
-    {% endif %}
-
-</div>
+        // Renders the React component.
+        ReactDOM.render(
+            React.createElement(
+                AllexAddonsContainer,
+                {
+                    pluginName: '{{ plugin_name }}',
+                    addonsCount: '{{ count_addons }}',
+                    browseMoreUrl: '{{ browse_more_url }}',
+                    addons: addons,
+                    nonce: '{{ nonce }}',
+                }
+            ),
+            document.getElementById('allex-addons-container')
+        );
+    });
+</script>

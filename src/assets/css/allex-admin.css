@@ -14,11 +14,7 @@
 }
 
 /* Add-ons */
-.allex-hidden {
-    display: none;
-}
-
-.allex-message {
+.allex-addon-messages {
     margin-top: 5px;
     font-style: italic;
     padding: 6px;
@@ -26,48 +22,67 @@
     color: #dc6f8e;
 }
 
-.allex-license-key {
+.allex-addon-license {
     margin-top: 15px;
 }
 
-.allex-license-key label {
-    font-weight: bold;
-    font-size: 15px;
+.allex-addon-license a {
+    margin-left: 10px;
 }
 
-.allex-license-key code {
-    font-family: monospace;
+#allex-addons-installed label,
+.allex-addon-license label {
+    font-weight: bold;
     font-size: 15px;
+    margin-right: 10px;
+}
+
+#allex-addons-installed article div.allex-addon-license-form input[type="text"],
+.allex-addon-license code {
+    font-family: monospace;
+    font-size: 16px;
     display: inline-block;
-    width: 320px;
+    width: 360px;
     padding: 9px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.allex-addon-license code {
+    padding: 10px;
 }
 
 /* Add-ons - installed */
+
+#allex-addons-installed {
+    margin-top: 21px;
+}
 
 #allex-addons-installed article {
     display: block;
     width: 100%;
     position: relative;
-    margin-top: 21px;
+    margin-top: 10px;
     min-width: 255px;
-    min-height: 230px;
+    min-height: 200px;
     border: 1px solid #e5e5e5;
     box-shadow: 0 1px 1px rgba(0, 0, 0, .04);
     background: #ffffff;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
+    padding-left: 130px;
 }
 
-#allex-addons-installed article header {
+#allex-addons-installed article > i {
     padding: 10px;
     position: absolute;
     left: 0;
     top: 0;
     text-align: center;
     width: 90px;
-    height: 210px;
+    height: 180px;
     line-height: 200px;
     font-size: 38px;
     color: #746ea4;
@@ -80,31 +95,54 @@
     border-bottom-left-radius: 4px;
 }
 
-#allex-addons-installed article div.body {
-    padding: 10px;
-    position: absolute;
-    left: 120px;
-    top: 0;
+#allex-addons-installed article div.allex-addon-license-form {
+    margin-top: 10px;
 }
 
-#allex-addons-installed article div.body input[type="text"] {
-    min-height: 36px;
-    font-family: monospace;
-    font-size: 16px;
-    font-weight: bold;
+#allex-addons-installed article div.allex-addon-license-form input[type="text"] {
     color: #474773;
-    letter-spacing: 2px;
+}
+
+#allex-addons-installed article div.allex-addon-license-form i {
+    margin-top: 12px;
+    margin-left: 8px;
+    cursor: pointer;
+}
+
+#allex-addons-installed .allex-addon-license-status {
+    margin-left: 98px;
+    margin-top: 4px;
+    font-size: 14px;
+    max-width: 360px;
+    color: #4b4c4f;
+    font-style: italic;
+    font-weight: bold;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
 }
 
 #allex-addons-installed article button {
     margin-left: 10px;
 }
 
+#allex-addons-installed .allex-addon-messages {
+    margin-left: 96px;
+}
+
 /* Add-ons - missed */
 
-#allex-addons-missed .grid {
+#allex-addons-missed {
     width: 100%;
     display: block;
+}
+
+.allex-addons-table-header {
+    text-align: center;
+    width: 100%;
+    margin: 30px 0;
 }
 
 #allex-addons-missed article {
@@ -122,16 +160,18 @@
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
+    padding-left: 130px;
 }
 
-#allex-addons-missed article header {
+#allex-addons-missed article > i {
     padding: 10px;
     position: absolute;
     left: 0;
     top: 0;
     text-align: center;
     width: 90px;
-    line-height: 150px;
+    height: 150px;
+    line-height: 140px;
     font-size: 38px;
     color: #746ea4;
     background-color: #e2e2e2;
@@ -143,36 +183,8 @@
     border-bottom-left-radius: 4px;
 }
 
-#allex-addons-missed article div.body {
-    padding: 10px;
-    position: absolute;
-    left: 120px;
-    top: 0;
-}
-
-#allex-addons-missed article div.body input[type="text"] {
-    min-height: 36px;
-    font-family: monospace;
-    font-size: 16px;
-    font-weight: bold;
-    color: #474773;
-    letter-spacing: 2px;
-}
-
-#get-plugins-message {
-    text-align: center;
-    margin-top: 50px;
-    margin-bottom: 20px;
-}
-
-/* Add-ons - container */
-
-#allex-addons-wrapper section.container {
-    display: none;
-}
-
-#allex-addons-wrapper .container.active {
-    display: block;
+#allex-addons-missed article header {
+    width: 95%;
 }
 
 /* Loader */
