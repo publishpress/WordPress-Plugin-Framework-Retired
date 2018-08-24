@@ -41,14 +41,10 @@ class Upgrade extends Abstract_Module {
 	/**
 	 * Add an Upgrade link to the action links in the plugin list.
 	 *
-	 * $params = [
-	 *     'addons_page_url' => '',
-	 * ]
-	 *
-	 * @param array $params
+	 * @param string $addons_page_url
 	 */
-	public function init( $params ) {
-		$this->url = $params['url'];
+	public function init( $addons_page_url ) {
+		$this->url = $addons_page_url;
 
 		$this->add_hooks();
 	}
