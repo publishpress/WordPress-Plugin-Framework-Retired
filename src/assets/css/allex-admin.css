@@ -61,6 +61,9 @@
 
 #allex-addons-installed article {
     display: block;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
     width: 100%;
     position: relative;
     margin-top: 10px;
@@ -147,12 +150,13 @@
 
 #allex-addons-missed article {
     position: relative;
-    min-width: 255px;
     min-height: 170px;
     border: 1px solid #e5e5e5;
     box-shadow: 0 1px 1px rgba(0, 0, 0, .04);
     background: #ffffff;
     width: 48%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
     display: inline-block;
     margin-right: 10px;
@@ -184,7 +188,9 @@
 }
 
 #allex-addons-missed article header {
-    width: 95%;
+    width: auto;
+    position: absolute;
+    padding-right: 15px;
 }
 
 /* Loader */
