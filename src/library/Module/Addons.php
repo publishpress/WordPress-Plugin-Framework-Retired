@@ -124,12 +124,13 @@ class Addons extends Abstract_Module {
 		}
 
 		$context = [
-			'browse_more_url' => $addons_page_url,
-			'addons'          => $addons,
-			'count_addons'    => $count,
-			'plugin_name'     => $this->plugin_name,
-			'nonce'           => wp_create_nonce( 'allex_activate_license' ),
-			'labels'          => [
+			'browse_more_url'    => $addons_page_url,
+			'addons'             => $addons,
+			'count_addons'       => $count,
+			'count_addons_total' => count( $addons ),
+			'plugin_name'        => $this->plugin_name,
+			'nonce'              => wp_create_nonce( 'allex_activate_license' ),
+			'labels'             => [
 				'installed'         => __( 'Installed Extensions', 'allex' ),
 				'browse_more'       => __( 'Browse More Extensions', 'allex' ),
 				'enter_license_key' => __( 'Enter your license key', 'allex' ),

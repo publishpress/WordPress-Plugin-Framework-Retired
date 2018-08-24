@@ -16,7 +16,7 @@
                 'isActive': {{ addon.is_active ? 'true' : 'false' }},
                 'licenseKey': '{{ addon.license_key }}',
                 'licenseStatus': '{{ addon.license_status }}',
-                'eddId': '{{ addon.edd_id }}',
+                'eddId': '{{ addon.edd_id }}'
             }
         );
         {% endfor %}
@@ -28,9 +28,10 @@
                 {
                     pluginName: '{{ plugin_name }}',
                     addonsCount: '{{ count_addons }}',
+                    addonsCountTotal: '{{ count_addons_total }}',
                     browseMoreUrl: '{{ browse_more_url }}',
                     addons: addons,
-                    nonce: '{{ nonce }}',
+                    nonce: '{{ nonce }}'
                 }
             ),
             document.getElementById('allex-addons-container')

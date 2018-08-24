@@ -38,6 +38,7 @@ class AllexAddonsTabs extends React.Component {
      * @returns {*}
      */
     render () {
+
         return (
             <div className="nav-tab-wrapper">
                 {this.props.addonsCount > 0 ? (
@@ -71,6 +72,8 @@ class AllexAddonsTabs extends React.Component {
  * @param {String} currentTab
  * @param {String} nonce
  * @param {String} pluginName
+ * @param {Int} addonsCount
+ * @param {Int} addonsCountTotal
  */
 class AllexAddonsTable extends React.Component {
     /**
@@ -104,6 +107,10 @@ class AllexAddonsTable extends React.Component {
 
         return (
             <section id={'allex-addons-' + this.props.currentTab} className="allex-addons-container">
+                {this.props.addonsCount == this.props.addonsCountTotal ? (
+                    <p class="notice allex-addons-all-installed">{allexContext.labels.all_plugins_installed}</p>
+                ): (null)}
+
                 {rows}
             </section>
         );
@@ -258,7 +265,7 @@ class AllexAddonsRow extends React.Component {
                 component.setState({processing: false});
 
                 // Error.
-                component.addMessage(textStatus + ". " + allexContext.labels.contact_support);
+                component.addMessage(textStatus + '. ' + allexContext.labels.contact_support);
             }
         });
     }
@@ -363,6 +370,7 @@ class AllexAddonsRow extends React.Component {
  *
  * @param {String} pluginName
  * @param {Int} addonsCount
+ * @param {Int} addonsCountTotal
  * @param {String} browseMoreUrl
  * @param {Array} addons
  * @param {String} nonce
@@ -405,6 +413,7 @@ class AllexAddonsContainer extends React.Component {
             <div id="allex-addons-table" className={this.props.pluginName}>
                 <AllexAddonsTabs
                     addonsCount={this.props.addonsCount}
+                    addonsCountTotal={this.props.addonsCountTotal}
                     currentTab={this.state.currentTab}
                     parentTabClickHandler={this.handleTabClick}>
                 </AllexAddonsTabs>
@@ -418,7 +427,8 @@ class AllexAddonsContainer extends React.Component {
                 ) : (null)}
 
                 <AllexAddonsTable addons={this.props.addons} currentTab={this.state.currentTab} nonce={this.props.nonce}
-                                  pluginName={this.props.pluginName}/>
+                                  pluginName={this.props.pluginName} addonsCount={this.props.addonsCount}
+                                  addonsCountTotal={this.props.addonsCountTotal}/>
             </div>
         );
     }

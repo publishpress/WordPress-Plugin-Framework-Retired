@@ -193,6 +193,11 @@
     padding-right: 15px;
 }
 
+.allex-addons-all-installed {
+    text-align: center;
+    padding: 10px;
+}
+
 /* Loader */
 .lds-dual-ring {
     display: inline-block;
