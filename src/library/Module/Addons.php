@@ -84,7 +84,7 @@ class Addons extends Abstract_Module {
 	 * Add the hooks.
 	 */
 	protected function add_hooks() {
-		add_action( 'alex_echo_addons_page', [ $this, 'echo_addons_page' ], 10 );
+		add_action( 'allex_echo_addons_page', [ $this, 'echo_addons_page' ], 10 );
 		add_action( 'wp_ajax_allex_addon_license_validate', [ $this, 'ajax_validate_license_key' ] );
 	}
 
