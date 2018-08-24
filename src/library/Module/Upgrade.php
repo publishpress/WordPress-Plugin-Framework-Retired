@@ -101,12 +101,23 @@ class Upgrade extends Abstract_Module {
 	public function render_sidebar_ad() {
 		$img_path = str_replace( ABSPATH, '', dirname( dirname( __DIR__ ) ) ) . '/assets/img/subscription-ad.jpg';
 
+		/**
+		 * Get the mailchimp config for the plugin.
+		 *
+		 * @param array  $mailchimp_config
+		 * @param string $plugin_name
+		 *
+		 * @return array
+		 */
+		$mailchimp_config = apply_filters( 'allex_upgrade_mailchimp_config', [], $this->plugin_name );
+
 		echo $this->twig->render(
 			'subscription_ad.twig',
 			[
-				'image_src'  => get_site_url() . '/' . $img_path,
-				'action_url' => $this->subscription_ad_url,
-				'text'       => [
+				'image_src'        => get_site_url() . '/' . $img_path,
+				'action_url'       => $this->subscription_ad_url,
+				'mailchimp_config' => $mailchimp_config,
+				'text'             => [
 					'title'         => sprintf( __( 'Get %d%% off the %s extensions', 'allex' ),
 						$this->subscription_discount,
 						$this->plugin_title ),
