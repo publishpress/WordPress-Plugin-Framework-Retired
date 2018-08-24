@@ -18,18 +18,118 @@ msgstr ""
 "X-Generator: Poedit 2.1.1\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: Reviews.php:222
+#: library/Module/Addons.php:134 library/Module/Assets.php:97
+msgid "Installed Extensions"
+msgstr ""
+
+#: library/Module/Addons.php:135 library/Module/Assets.php:98
+msgid "Browse More Extensions"
+msgstr ""
+
+#: library/Module/Addons.php:136 library/Module/Assets.php:99
+msgid "Enter your license key"
+msgstr ""
+
+#: library/Module/Addons.php:137 library/Module/Assets.php:100
+msgid "Activate"
+msgstr ""
+
+#: library/Module/Addons.php:138 library/Module/Assets.php:101
+msgid "License Key"
+msgstr ""
+
+#: library/Module/Addons.php:139 library/Module/Assets.php:102
+msgid "Change"
+msgstr ""
+
+#: library/Module/Addons.php:140 library/Module/Assets.php:103
+msgid "Get Pro Add-ons!"
+msgstr ""
+
+#: library/Module/Addons.php:236 library/Module/Addons.php:244
+msgid "You're not allowed to do this."
+msgstr ""
+
+#: library/Module/Addons.php:240
+msgid "Invalid request."
+msgstr ""
+
+#: library/Module/Addons.php:249
+msgid "Invalid plugin name."
+msgstr ""
+
+#: library/Module/Addons.php:254 library/Module/Addons.php:273
+msgid "Invalid addon name."
+msgstr ""
+
+#: library/Module/Addons.php:259
+msgid "Invalid addon EDD ID."
+msgstr ""
+
+#: library/Module/Addons.php:264
+msgid "Invalid license key."
+msgstr ""
+
+#: library/Module/Addons.php:269
+msgid "Invalid add-on."
+msgstr ""
+
+#: library/Module/Addons.php:301 library/Module/Addons.php:313
+msgid "An error occurred. Please, try again or contact the support team."
+msgstr ""
+
+#: library/Module/Assets.php:104
+msgid "Please, wait..."
+msgstr ""
+
+#: library/Module/Assets.php:105
+msgid "Please, enter a license key."
+msgstr ""
+
+#: library/Module/Assets.php:106
+msgid "If the error persists, please contact the support team."
+msgstr ""
+
+#: library/Module/Assets.php:108
+msgid "Awesome, it seems like you have all the add-ons installed. Thank you for supporting us."
+msgstr ""
+
+#: library/Module/Assets.php:109
+msgid "Invalid license"
+msgstr ""
+
+#: library/Module/Assets.php:110
+msgid "Activated"
+msgstr ""
+
+#: library/Module/Assets.php:111
+msgid "This license key was not found."
+msgstr ""
+
+#: library/Module/Assets.php:112
+msgid "This license key is disabled."
+msgstr ""
+
+#: library/Module/Assets.php:113
+msgid "This license key has expired."
+msgstr ""
+
+#: library/Module/Assets.php:114
+msgid "This license key has no activations left. Please, consider upgrading your plan."
+msgstr ""
+
+#: library/Module/Reviews.php:224
 msgid "Ok, you deserved it"
 msgstr ""
 
-#: Reviews.php:223
+#: library/Module/Reviews.php:225
 msgid "I already did"
 msgstr ""
 
-#: Reviews.php:224
+#: library/Module/Reviews.php:226
 msgid "No, not good enough for now"
 msgstr ""
 
-#: Upgrade.php:30
+#: library/Module/Upgrade.php:68
 msgid "Upgrade"
 msgstr ""
