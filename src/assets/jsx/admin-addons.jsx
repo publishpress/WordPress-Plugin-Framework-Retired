@@ -108,7 +108,7 @@ class AllexAddonsTable extends React.Component {
         return (
             <section id={'allex-addons-' + this.props.currentTab} className="allex-addons-container">
                 {this.props.addonsCount == this.props.addonsCountTotal ? (
-                    <p class="notice allex-addons-all-installed">{allexContext.labels.all_plugins_installed}</p>
+                    <p className="notice allex-addons-all-installed">{allexContext.labels.all_plugins_installed}</p>
                 ): (null)}
 
                 {rows}
