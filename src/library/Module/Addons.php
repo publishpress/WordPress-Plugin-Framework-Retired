@@ -122,12 +122,28 @@ class Addons extends Abstract_Module {
 			}
 		}
 
+		/**
+		 * Filter to return a boolean value to say if it should display or not a sidebar.
+		 *
+		 * @var bool
+		 */
+		$show_sidebar = apply_filters( 'allex_upgrade_show_sidebar_ad', true );
+
+		$sidebar_output = '';
+		if ( $show_sidebar ) {
+			ob_start();
+			do_action( 'allex_upgrade_sidebar_ad' );
+			$sidebar_output = ob_get_clean();
+		}
+
 		$context = [
 			'browse_more_url'    => $addons_page_url,
 			'addons'             => $addons,
 			'count_addons'       => $count,
 			'count_addons_total' => count( $addons ),
 			'plugin_name'        => $this->plugin_name,
+			'show_sidebar'       => $show_sidebar,
+			'sidebar_output'     => $sidebar_output,
 			'nonce'              => wp_create_nonce( 'allex_activate_license' ),
 			'labels'             => [
 				'installed'         => __( 'Installed Extensions', 'allex' ),
