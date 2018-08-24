@@ -115,10 +115,18 @@ class Addons extends Abstract_Module {
 		// Cache the add-ons list.
 		$this->addons = $addons;
 
+		// Count the installed add-ons.
+		$count = 0;
+		foreach ( $addons as $addon ) {
+			if ( $addon['is_installed'] ) {
+				$count ++;
+			}
+		}
+
 		$context = [
 			'browse_more_url' => $addons_page_url,
 			'addons'          => $addons,
-			'count_addons'    => count( $addons ),
+			'count_addons'    => $count,
 			'plugin_name'     => $this->plugin_name,
 			'nonce'           => wp_create_nonce( 'allex_activate_license' ),
 			'labels'          => [
@@ -189,8 +197,10 @@ class Addons extends Abstract_Module {
 			$addon['license_key']    = get_option( "{$addon_name}_license_key" );
 
 			// Applies filters to the license key and status.
-			$addon['license_status'] = apply_filters( 'allex_addons_get_license_status', $addon['license_status'], $addon['slug'] );
-			$addon['license_key'] = apply_filters( 'allex_addons_get_license_key', $addon['license_key'], $addon['slug'] );
+			$addon['license_status'] = apply_filters( 'allex_addons_get_license_status', $addon['license_status'],
+				$addon['slug'] );
+			$addon['license_key']    = apply_filters( 'allex_addons_get_license_key', $addon['license_key'],
+				$addon['slug'] );
 		}
 	}
 
