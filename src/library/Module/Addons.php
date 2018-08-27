@@ -273,7 +273,7 @@ class Addons extends Abstract_Module {
 		 *          ],
 		 *     ],
 		 */
-		$addons = apply_filters( 'allex_addons', $this->plugin_name, [] );
+		$addons = apply_filters( 'allex_addons', [], $this->plugin_name );
 
 		$response = [
 			'success'        => false,
