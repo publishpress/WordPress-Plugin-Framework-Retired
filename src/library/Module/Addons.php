@@ -127,7 +127,7 @@ class Addons extends Abstract_Module {
 		 *
 		 * @var bool
 		 */
-		$show_sidebar = apply_filters( 'allex_upgrade_show_sidebar_ad', true );
+		$show_sidebar = apply_filters( 'allex_upgrade_show_sidebar_ad', true, $this->plugin_name, 'addons' );
 
 		$sidebar_output = '';
 		if ( $show_sidebar ) {
