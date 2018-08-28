@@ -337,7 +337,7 @@ class Addons extends Abstract_Module {
 						'edd_action' => "activate_license",
 						'license'    => $license_key,
 						'item_id'    => $addon_edd_id,
-						'url'        => 'https://mytets.com',
+						'url'        => site_url(),
 					],
 				]
 			);
