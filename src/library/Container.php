@@ -17,7 +17,7 @@ class Container extends \Pimple\Container {
 		 * @return string
 		 */
 		$this['VERSION'] = function ( $c ) {
-			return '0.4.7';
+			return '0.4.9';
 		};
 
 		/**
@@ -28,6 +28,16 @@ class Container extends \Pimple\Container {
 		$this['PLUGIN_BASENAME'] = function ( $c ) use ( $values ) {
 			return $values['PLUGIN_BASENAME'];
 		};
+
+		/**
+		 * @param $c
+		 *
+		 * @return mixed
+		 */
+		$this['SUBSCRIPTION_AD_URL'] = function ( $c ) use ( $values ) {
+			return $values['SUBSCRIPTION_AD_URL'];
+		};
+
 
 		/**
 		 * @param $c
@@ -63,6 +73,25 @@ class Container extends \Pimple\Container {
 		 */
 		$this['PLUGIN_NAME'] = function ( $c ) {
 			return str_replace( '.php', '', basename( $c['PLUGIN_BASENAME'] ) );
+		};
+
+		/**
+		 * @param $c
+		 *
+		 * @return mixed
+		 */
+		$this['PLUGIN_TITLE'] = function ( $c ) {
+			if ( is_admin() ) {
+				if ( ! function_exists( 'get_plugin_data' ) ) {
+					require_once ABSPATH . '/wp-admin/includes/plugin.php';
+				}
+
+				$data = get_plugin_data( ABSPATH . '/wp-content/plugins/' . $c['PLUGIN_BASENAME'] );
+
+				return $data['Name'];
+			}
+
+			return $c['PLUGIN_NAME'];
 		};
 
 		/**

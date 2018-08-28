@@ -86,6 +86,9 @@ class Addons extends Abstract_Module {
 	protected function add_hooks() {
 		add_action( 'allex_echo_addons_page', [ $this, 'echo_addons_page' ], 10 );
 		add_action( 'wp_ajax_allex_addon_license_validate', [ $this, 'ajax_validate_license_key' ] );
+
+		add_filter( 'allex_addons', [ $this, 'filter_allex_addons_append_data' ], 999998, 2 );
+		add_filter( 'allex_installed_addons', [ $this, 'filter_allex_installed_addons' ], 999999, 2 );
 	}
 
 	/**
@@ -106,11 +109,7 @@ class Addons extends Abstract_Module {
 		 *          ],
 		 *     ],
 		 */
-		$addons = apply_filters( 'allex_addons', $this->plugin_name, [] );
-
-		$this->set_addons_state( $addons );
-
-		$this->check_addons_license( $addons );
+		$addons = apply_filters( 'allex_addons', [], $this->plugin_name, false );
 
 		// Cache the add-ons list.
 		$this->addons = $addons;
@@ -123,12 +122,28 @@ class Addons extends Abstract_Module {
 			}
 		}
 
+		/**
+		 * Filter to return a boolean value to say if it should display or not a sidebar.
+		 *
+		 * @var bool
+		 */
+		$show_sidebar = apply_filters( 'allex_upgrade_show_sidebar_ad', true, $this->plugin_name, 'addons' );
+
+		$sidebar_output = '';
+		if ( $show_sidebar ) {
+			ob_start();
+			do_action( 'allex_upgrade_sidebar_ad' );
+			$sidebar_output = ob_get_clean();
+		}
+
 		$context = [
 			'browse_more_url'    => $addons_page_url,
 			'addons'             => $addons,
 			'count_addons'       => $count,
 			'count_addons_total' => count( $addons ),
 			'plugin_name'        => $this->plugin_name,
+			'show_sidebar'       => $show_sidebar,
+			'sidebar_output'     => $sidebar_output,
 			'nonce'              => wp_create_nonce( 'allex_activate_license' ),
 			'labels'             => [
 				'installed'         => __( 'Installed Extensions', 'allex' ),
@@ -142,6 +157,22 @@ class Addons extends Abstract_Module {
 		];
 
 		echo $this->twig->render( 'addons_list.twig', $context );
+	}
+
+	/**
+	 * Append add-ons' state and license info to the add-ons array.
+	 *
+	 * @param $addons
+	 * @param $plugin_name
+	 *
+	 * @return mixed
+	 */
+	public function filter_allex_addons_append_data( $addons, $plugin_name ) {
+
+		$this->set_addons_state( $addons );
+		$this->check_addons_license( $addons );
+
+		return $addons;
 	}
 
 	/**
@@ -183,7 +214,6 @@ class Addons extends Abstract_Module {
 		return is_plugin_active( "{$plugin_name}/{$plugin_name}.php" );
 	}
 
-
 	/**
 	 * @param array $addons
 	 */
@@ -206,6 +236,27 @@ class Addons extends Abstract_Module {
 	}
 
 	/**
+	 * Filter the list of add-ons by state.
+	 *
+	 * @param $addons
+	 * @param $plugin_name
+	 *
+	 * @return mixed
+	 */
+	public function filter_allex_installed_addons( $addons, $plugin_name ) {
+
+		$addons = apply_filters( 'allex_addons', [], $plugin_name );
+
+		foreach ( $addons as $addon_slug => $addon ) {
+			if ( ! $addon['is_installed'] ) {
+				unset( $addons[ $addon_slug ] );
+			}
+		}
+
+		return $addons;
+	}
+
+	/**
 	 * AJAX endpoint that validates a given license key for an extension.
 	 * Echoes JSON data.
 	 */
@@ -222,7 +273,7 @@ class Addons extends Abstract_Module {
 		 *          ],
 		 *     ],
 		 */
-		$addons = apply_filters( 'allex_addons', $this->plugin_name, [] );
+		$addons = apply_filters( 'allex_addons', [], $this->plugin_name );
 
 		$response = [
 			'success'        => false,
@@ -286,7 +337,7 @@ class Addons extends Abstract_Module {
 						'edd_action' => "activate_license",
 						'license'    => $license_key,
 						'item_id'    => $addon_edd_id,
-						'url'        => 'https://mytets.com',
+						'url'        => site_url(),
 					],
 				]
 			);

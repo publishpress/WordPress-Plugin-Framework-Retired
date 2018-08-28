@@ -49,7 +49,14 @@ class Assets extends Abstract_Module {
 		wp_enqueue_style(
 			'allex',
 			$this->assets_base_url . '/css/allex-admin.css',
-			[ 'allex-font-awesome' ],
+			[ 'allex-font-awesome', 'allex-grid' ],
+			$this->version
+		);
+
+		wp_enqueue_style(
+			'allex-grid',
+			$this->assets_base_url . '/css/allex-grid.min.css',
+			[],
 			$this->version
 		);
 
