@@ -45,7 +45,10 @@ class Container extends \Pimple\Container {
 		 * @return bool|string
 		 */
 		$this['FRAMEWORK_BASE_PATH'] = function ( $c ) {
-			return realpath( __DIR__ . '/../' );
+			// Added slashes to prevent issues in Windows machines, where the backslash where interpreted as escape char.
+			$dir = str_replace(  '\\', '/', __DIR__ );
+
+			return realpath( $dir . '/../' );
 		};
 
 		/**
@@ -63,7 +66,12 @@ class Container extends \Pimple\Container {
 		 * @return string
 		 */
 		$this['ASSETS_BASE_URL'] = function ( $c ) {
-			return get_site_url() . '/' . str_replace( ABSPATH, '', $c['FRAMEWORK_BASE_PATH'] ) . '/assets';
+			// Added slashes to prevent issues in Windows machines, where the backslash where interpreted as escape char.
+			$abspath = str_replace(  '\\', '/', ABSPATH );
+
+			$relative_path = str_replace( $abspath, '', $c['FRAMEWORK_BASE_PATH'] ) . '/assets';
+
+			return get_site_url() . '/' . $relative_path;
 		};
 
 		/**
