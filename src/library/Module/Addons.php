@@ -412,8 +412,8 @@ class Addons extends Abstract_Module {
 				if ( isset( $data->error ) && ! empty( $data->error ) ) {
 					$response['license_status'] = $data->error;
 
-					update_option( "{$addon_name}_license_key", $license_key );
-					update_option( "{$addon_name}_license_status", $data->error );
+					update_option( "{$addon_name}_license_key", $license_key, true );
+					update_option( "{$addon_name}_license_status", $data->error, true );
 
 					do_action( 'allex_addon_update_license', $plugin_name, $addon_slug, $license_key, $data->error );
 				}
@@ -424,8 +424,8 @@ class Addons extends Abstract_Module {
 				$response['license_status'] = static::LICENSE_STATUS_VALID;
 
 				// Store the license key and status.
-				update_option( "{$addon_name}_license_key", $license_key );
-				update_option( "{$addon_name}_license_status", static::LICENSE_STATUS_VALID );
+				update_option( "{$addon_name}_license_key", $license_key, true );
+				update_option( "{$addon_name}_license_status", static::LICENSE_STATUS_VALID, true );
 
 				do_action( 'allex_addon_update_license', $plugin_name, $addon_slug, $license_key,
 					static::LICENSE_STATUS_VALID );

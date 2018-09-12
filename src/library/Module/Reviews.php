@@ -120,14 +120,14 @@ class Reviews extends Abstract_Module {
      * @param string $state
      */
     protected function store_state_status( $status ) {
-        update_option( $this->option_name_status, $status );
+        update_option( $this->option_name_status, $status, true );
     }
 
     /**
      * @param string $timestamp
      */
     protected function store_state_timestamp( $timestamp ) {
-        update_option( $this->option_name_timestamp, $timestamp );
+        update_option( $this->option_name_timestamp, $timestamp, true );
     }
 
     /**
