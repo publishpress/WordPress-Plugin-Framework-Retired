@@ -84,7 +84,7 @@ class Addons extends Abstract_Module {
 	 * Add the hooks.
 	 */
 	protected function add_hooks() {
-		add_action( 'allex_echo_addons_page', [ $this, 'echo_addons_page' ], 10 );
+		add_action( 'allex_echo_addons_page', [ $this, 'echo_addons_page' ], 10, 2 );
 		add_action( 'wp_ajax_allex_addon_license_validate', [ $this, 'ajax_validate_license_key' ] );
 
 		add_filter( 'allex_addons', [ $this, 'filter_allex_addons_append_data' ], 999998, 2 );
@@ -93,12 +93,37 @@ class Addons extends Abstract_Module {
 
 	/**
 	 * @param string $addons_page_url
+	 * @param string $plugin_name
 	 *
 	 * @throws \Twig_Error_Loader
 	 * @throws \Twig_Error_Runtime
 	 * @throws \Twig_Error_Syntax
 	 */
-	public function echo_addons_page( $addons_page_url ) {
+	public function echo_addons_page( $addons_page_url, $plugin_name = null ) {
+
+		/*
+		 * ---------------------------------------------------------------------
+		 * Backward compatibility for users using PublishPress and UpStream with
+		 * an older version of this library where the $plugin_name param is not
+		 * sent. We force its value, so the add-ons page keeps working until
+		 * they update the plugin.
+		 *
+		 * @todo: Remove this after a few releases
+		 *
+		 * @since 1.16.3
+		 */
+		if ( is_null( $plugin_name ) ) {
+			$plugin_name = $this->plugin_name;
+		}
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+
+		// If not related to this plugin, we skip it.
+		if ( $plugin_name !== $this->plugin_name ) {
+			return;
+		}
+
 		/**
 		 *     $addons = [
 		 *          [
@@ -127,12 +152,12 @@ class Addons extends Abstract_Module {
 		 *
 		 * @var bool
 		 */
-		$show_sidebar = apply_filters( 'allex_upgrade_show_sidebar_ad', true, $this->plugin_name, 'addons' );
+		$show_sidebar = apply_filters( 'allex_upgrade_show_sidebar_ad', false, $this->plugin_name, 'addons' );
 
 		$sidebar_output = '';
 		if ( $show_sidebar ) {
 			ob_start();
-			do_action( 'allex_upgrade_sidebar_ad' );
+			do_action( 'allex_upgrade_sidebar_ad', $this->plugin_name );
 			$sidebar_output = ob_get_clean();
 		}
 
@@ -168,6 +193,11 @@ class Addons extends Abstract_Module {
 	 * @return mixed
 	 */
 	public function filter_allex_addons_append_data( $addons, $plugin_name ) {
+
+		// If not related to this plugin, we skip it.
+		if ( $plugin_name !== $this->plugin_name ) {
+			return $addons;
+		}
 
 		$this->set_addons_state( $addons );
 		$this->check_addons_license( $addons );
@@ -245,6 +275,11 @@ class Addons extends Abstract_Module {
 	 */
 	public function filter_allex_installed_addons( $addons, $plugin_name ) {
 
+		// If not related to this plugin, we skip it returning an empty array.
+		if ( $plugin_name !== $this->plugin_name ) {
+			return $addons;
+		}
+
 		$addons = apply_filters( 'allex_addons', [], $plugin_name );
 
 		foreach ( $addons as $addon_slug => $addon ) {
@@ -261,19 +296,10 @@ class Addons extends Abstract_Module {
 	 * Echoes JSON data.
 	 */
 	public function ajax_validate_license_key() {
-		header( 'Content-Type: application/json' );
-
-		/**
-		 *     $addons = [
-		 *          [
-		 *              'slug'        => '',
-		 *              'title'       => '',
-		 *              'description' => '',
-		 *              'icon_class'  => '',
-		 *          ],
-		 *     ],
-		 */
-		$addons = apply_filters( 'allex_addons', [], $this->plugin_name );
+		// If we are not in the valid plugin, we skip it. Maybe the method was called by another instance.
+		if ( ! isset( $_POST['plugin_name'] ) || $_POST['plugin_name'] !== $this->plugin_name ) {
+			return;
+		}
 
 		$response = [
 			'success'        => false,
@@ -314,6 +340,18 @@ class Addons extends Abstract_Module {
 			if ( empty( $license_key ) ) {
 				throw new \Exception( __( 'Invalid license key.', 'allex' ) );
 			}
+
+			/**
+			 *     $addons = [
+			 *          [
+			 *              'slug'        => '',
+			 *              'title'       => '',
+			 *              'description' => '',
+			 *              'icon_class'  => '',
+			 *          ],
+			 *     ],
+			 */
+			$addons = apply_filters( 'allex_addons', [], $this->plugin_name );
 
 			// Check if it is a valid add-on.
 			if ( empty( $addons ) ) {
@@ -396,6 +434,7 @@ class Addons extends Abstract_Module {
 			$response['message'] = $e->getMessage();
 		}
 
+		header( 'Content-Type: application/json' );
 		echo wp_json_encode( $response );
 
 		wp_die();

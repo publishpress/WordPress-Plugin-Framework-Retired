@@ -73,7 +73,7 @@ class Upgrade extends Abstract_Module {
 		add_action( 'plugin_action_links_' . $this->plugin_basename, [ $this, 'plugin_action_links' ],
 			999 );
 		add_action( 'allex_upgrade_sidebar_ad', [ $this, 'render_sidebar_ad' ] );
-		add_filter( 'allex_upgrade_show_sidebar_ad', [ $this, 'filter_allex_upgrade_show_sidebar_ad' ] );
+		add_filter( 'allex_upgrade_show_sidebar_ad', [ $this, 'filter_allex_upgrade_show_sidebar_ad' ], 10, 2 );
 	}
 
 	/**
@@ -97,8 +97,34 @@ class Upgrade extends Abstract_Module {
 
 	/**
 	 * Echo the sidebar with a form to subscribe for 20% discount.
+	 *
+	 * @param string $plugin_name
 	 */
-	public function render_sidebar_ad() {
+	public function render_sidebar_ad( $plugin_name = null ) {
+		/*
+		 * ---------------------------------------------------------------------
+		 * Backward compatibility for users using PublishPress and UpStream with
+		 * an older version of this library where the $plugin_name param is not
+		 * sent. We force its value, so the add-ons page keeps working until
+		 * they update the plugin.
+		 *
+		 * @todo: Remove this after a few releases
+		 *
+		 * @since 1.16.3
+		 */
+		if ( is_null( $plugin_name ) ) {
+			$plugin_name = $this->plugin_name;
+		}
+		/*
+		 * ---------------------------------------------------------------------
+		 */
+
+		// If not related to this plugin, we skip it.
+		if ( $plugin_name !== $this->plugin_name ) {
+			return;
+		}
+
+		// @todo: The path have to be relative to plugin, not to the file. Having multiple plugins using this, only the same image will be used.
 		$img_path = str_replace( ABSPATH, '', dirname( dirname( __DIR__ ) ) ) . '/assets/img/subscription-ad.jpg';
 
 		/**
@@ -133,11 +159,12 @@ class Upgrade extends Abstract_Module {
 	}
 
 	/**
-	 * @param $show_sidebar
+	 * @param bool $show_sidebar
+	 * @param string $plugin_name
 	 *
 	 * @return bool
 	 */
-	public function filter_allex_upgrade_show_sidebar_ad( $show_sidebar ) {
+	public function filter_allex_upgrade_show_sidebar_ad( $show_sidebar, $plugin_name = null ) {
 		if ( ( defined( 'DOING_AJAX' ) && DOING_AJAX )
 		     || ( defined( 'DOING_CRON' ) && DOING_CRON )
 		     || ! is_admin() ) {
@@ -145,9 +172,16 @@ class Upgrade extends Abstract_Module {
 			return false;
 		}
 
+		if ( $plugin_name !== $this->plugin_name ) {
+			return $show_sidebar;
+		}
+
 		// Check if we have all add-ons installed. If so, we do not show the sidebar.
 		$addons_installed = apply_filters( 'allex_installed_addons', [], $this->plugin_name );
 
-		return count( $addons_installed ) === 0;
+		$show_sidebar = count( $addons_installed ) === 0;
+
+
+		return $show_sidebar;
 	}
 }
