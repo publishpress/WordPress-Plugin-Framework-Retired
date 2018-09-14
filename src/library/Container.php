@@ -66,12 +66,17 @@ class Container extends \Pimple\Container {
 		 * @return string
 		 */
 		$this['ASSETS_BASE_URL'] = function ( $c ) {
-			// Added slashes to prevent issues in Windows machines, where the backslash where interpreted as escape char.
-			$abspath = str_replace(  '\\', '/', ABSPATH );
+			$abspath = ABSPATH;
 
-			$relative_path = str_replace( $abspath, '', $c['FRAMEWORK_BASE_PATH'] ) . '/assets';
+			// Fix for windows machines
+			if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+				$abspath = preg_replace('#/$#', '', $abspath);
+			}
 
-			return get_site_url() . '/' . $relative_path;
+			$path = str_replace($abspath, '', $c['FRAMEWORK_BASE_PATH']);
+			$path = str_replace('\\', '/', $path);
+
+			return get_site_url() . '/' . $path . '/assets';
 		};
 
 		/**
