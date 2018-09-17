@@ -53,6 +53,7 @@ class Upgrade extends Abstract_Module {
 		$this->plugin_title        = $this->container['PLUGIN_TITLE'];
 		$this->subscription_ad_url = $this->container['SUBSCRIPTION_AD_URL'];
 		$this->twig                = $this->container['twig'];
+		$this->assets_base_url     = $this->container['ASSETS_BASE_URL'];
 	}
 
 	/**
@@ -125,7 +126,7 @@ class Upgrade extends Abstract_Module {
 		}
 
 		// @todo: The path have to be relative to plugin, not to the file. Having multiple plugins using this, only the same image will be used.
-		$img_path = str_replace( ABSPATH, '', dirname( dirname( __DIR__ ) ) ) . '/assets/img/subscription-ad.jpg';
+		$img_url = $this->assets_base_url . '/assets/img/subscription-ad.jpg';
 
 		/**
 		 * Get the mailchimp config for the plugin.
@@ -140,7 +141,7 @@ class Upgrade extends Abstract_Module {
 		echo $this->twig->render(
 			'subscription_ad.twig',
 			[
-				'image_src'        => get_site_url() . '/' . $img_path,
+				'image_src'        => $img_url,
 				'action_url'       => $this->subscription_ad_url,
 				'mailchimp_config' => $mailchimp_config,
 				'text'             => [
