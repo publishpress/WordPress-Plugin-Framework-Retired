@@ -126,7 +126,7 @@ class Upgrade extends Abstract_Module {
 		}
 
 		// @todo: The path have to be relative to plugin, not to the file. Having multiple plugins using this, only the same image will be used.
-		$img_url = $this->assets_base_url . '/assets/img/subscription-ad.jpg';
+		$img_url = $this->assets_base_url . '/img/subscription-ad.jpg';
 
 		/**
 		 * Get the mailchimp config for the plugin.
