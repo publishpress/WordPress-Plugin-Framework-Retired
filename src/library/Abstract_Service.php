@@ -2,7 +2,8 @@
 
 namespace Allex;
 
-abstract class Abstract_Service {
+abstract class Abstract_Service
+{
     /**
      * @var Container
      */
@@ -13,14 +14,16 @@ abstract class Abstract_Service {
      *
      * @param Container $container
      */
-    public function __construct( Container $container ) {
+    public function __construct(Container $container)
+    {
         $this->container = $container;
     }
 
     /**
      * @return Container
      */
-    public function get_container() {
+    public function get_container()
+    {
         return $this->container;
     }
 }
