@@ -265,3 +265,8 @@ form textarea:invalid,
 #allex_subscription_ad .control-group {
     margin-top: 10px;
 }
+
+.allex-set-license-link {
+    font-weight: bold;
+    color: #b97500;
+}

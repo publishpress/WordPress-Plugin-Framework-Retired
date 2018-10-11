@@ -52,6 +52,11 @@ class Addons extends Abstract_Module
     protected $plugin_author;
 
     /**
+     * @var string
+     */
+    protected $setLicenseKeyLink;
+
+    /**
      * Upgrade constructor.
      *
      * @param Container $container
@@ -91,9 +96,11 @@ class Addons extends Abstract_Module
     {
         add_action('allex_echo_addons_page', [$this, 'echo_addons_page'], 10, 2);
         add_action('wp_ajax_allex_addon_license_validate', [$this, 'ajax_validate_license_key']);
+        add_action('allex_set_license_key_links', [$this, 'setLicenseKeyLinks'], 10, 2);
 
         add_filter('allex_addons', [$this, 'filter_allex_addons_append_data'], 999998, 2);
         add_filter('allex_installed_addons', [$this, 'filter_allex_installed_addons'], 999999, 2);
+        add_filter('plugin_action_links_' . $this->plugin_name, [$this, 'add_action_links']);
     }
 
     /**
@@ -451,5 +458,57 @@ class Addons extends Abstract_Module
         echo wp_json_encode($response);
 
         wp_die();
+    }
+
+    /**
+     * @param $plugin
+     * @param $link
+     *
+     * @return array
+     */
+    public function setLicenseKeyLinks($plugin, $link)
+    {
+        $this->setLicenseKeyLink = $link;
+
+        // Set license key link
+        $pool = apply_filters('allex_addons', [], $plugin);
+
+        foreach ($pool as $addon) {
+            if (file_exists(ABSPATH . 'wp-content/plugins/' . $addon['slug'] . '/' . $addon['slug'] . '.php')) {
+                add_action('plugin_action_links_' . $addon['slug'] . '/' . $addon['slug'] . '.php',
+                    [$this, 'actionSetLicenseKeyLink'], 998, 2);
+            }
+        }
+    }
+
+    /**
+     * Show a link to set the license key if there is no license key or is invalid.
+     *
+     * @param $links
+     * @param $pluginFile
+     *
+     * @return array
+     */
+    public function actionSetLicenseKeyLink($links, $pluginFile)
+    {
+        $addon         = str_replace('-', '_', str_replace('.php', '', basename($pluginFile)));
+        $licenseKey    = get_option($addon . '_license_key');
+        $licenseStatus = get_option($addon . '_license_status');
+
+        if (empty($licenseKey) || $licenseStatus !== 'valid') {
+            $context = [
+                'url'   => $this->setLicenseKeyLink,
+                'label' => __('Set the License Key', 'allex'),
+            ];
+
+            $link = $this->twig->render('action_link_set_key.twig', $context);
+
+            // Avoid to add duplicated link, in case it already exist
+            if (array_search($link, $links) === false) {
+                $links[] = $link;
+            }
+        }
+
+        return $links;
     }
 }
