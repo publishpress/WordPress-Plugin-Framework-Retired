@@ -57,6 +57,11 @@ class Addons extends Abstract_Module
     protected $setLicenseKeyLink;
 
     /**
+     * @var string
+     */
+    protected $updates_doc_url;
+
+    /**
      * Upgrade constructor.
      *
      * @param Container $container
@@ -70,6 +75,7 @@ class Addons extends Abstract_Module
         $this->plugin_dir_path = $this->get_plugins_dir_path();
         $this->twig            = $this->container['twig'];
         $this->edd_api_url     = $this->container['EDD_API_URL'];
+        $this->updates_doc_url = $this->container['UPDATES_DOC_URL'];
         $this->plugin_author   = $this->container['PLUGIN_NAME'];
     }
 
@@ -477,7 +483,55 @@ class Addons extends Abstract_Module
             if (file_exists(ABSPATH . 'wp-content/plugins/' . $addon['slug'] . '/' . $addon['slug'] . '.php')) {
                 add_action('plugin_action_links_' . $addon['slug'] . '/' . $addon['slug'] . '.php',
                     [$this, 'actionSetLicenseKeyLink'], 998, 2);
+
+                add_action('in_plugin_update_message-' . $addon['slug'] . '/' . $addon['slug'] . '.php',
+                    [$this, 'inPluginUpdateMessage'], 998, 2);
             }
+        }
+    }
+
+    /**
+     * @param $pluginData
+     * @param $response
+     */
+    public function inPluginUpdateMessage($pluginData, $response)
+    {
+        // Get the plugin's add-ons
+        $addons = apply_filters('allex_addons', [], $this->plugin_name);
+        $addons = array_keys($addons);
+
+        // If is not a plugin add-on, we stop.
+        if ( ! in_array($pluginData['slug'], $addons)) {
+            return;
+        }
+
+        $addon         = str_replace('-', '_', str_replace('.php', '', basename($pluginData['slug'])));
+        $licenseKey    = get_option($addon . '_license_key');
+        $licenseStatus = get_option($addon . '_license_status');
+
+        if ((empty($licenseKey) || $licenseStatus !== 'valid') && empty($response->package)) {
+            // Update available, but there is no package probably because there is no valid license key.
+            $context = [
+                'text' => [
+                    'please_enter_license_key' => __('Please enter a valid license key to enable automatic updates.',
+                        'allex'),
+                    'enter_license_key'        => __('Enter License Key', 'allex'),
+                ],
+                'link' => $this->setLicenseKeyLink,
+            ];
+
+            echo $this->twig->render('after_plugin_row.twig', $context);
+        } elseif (empty($response->package)) {
+            // Update available, valid license key, but no package found.
+            $context = [
+                'link_docs' => $this->updates_doc_url,
+                'text'      => [
+                    'message'   => __('Sorry, we couldn’t access the files for this update.', 'allex'),
+                    'link_docs' => __('Please click this link for more details.', 'allex'),
+                ],
+            ];
+
+            echo $this->twig->render('after_plugin_row_error.twig', $context);
         }
     }
 
@@ -498,7 +552,7 @@ class Addons extends Abstract_Module
         if (empty($licenseKey) || $licenseStatus !== 'valid') {
             $context = [
                 'url'   => $this->setLicenseKeyLink,
-                'label' => __('Set the License Key', 'allex'),
+                'label' => __('Enter License Key', 'allex'),
             ];
 
             $link = $this->twig->render('action_link_set_key.twig', $context);

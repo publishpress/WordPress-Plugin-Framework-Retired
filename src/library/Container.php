@@ -118,6 +118,17 @@ class Container extends \Pimple\Container
             return $values['EDD_API_URL'];
         };
 
+
+        /**
+         * @param $c
+         *
+         * @return string
+         */
+        $this['UPDATES_DOC_URL'] = function ($c) use ($values) {
+            return $values['UPDATES_DOC_URL'];
+        };
+
+
         /**
          * @param $c
          *
