@@ -18,7 +18,15 @@ class Textdomain extends Abstract_Service
     {
         parent::__construct($container);
 
-        $this->locale = get_locale();
+        $this->locale = $this->get_locale();
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function get_locale()
+    {
+        return get_locale();
     }
 
     /**
