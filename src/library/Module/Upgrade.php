@@ -27,11 +27,6 @@ class Upgrade extends Abstract_Module
     protected $plugin_title;
 
     /**
-     * @var string
-     */
-    protected $subscription_ad_url;
-
-    /**
      * @var \Twig_Environment
      */
     protected $twig;
@@ -53,7 +48,6 @@ class Upgrade extends Abstract_Module
         $this->plugin_basename     = $this->container['PLUGIN_BASENAME'];
         $this->plugin_name         = $this->container['PLUGIN_NAME'];
         $this->plugin_title        = $this->container['PLUGIN_TITLE'];
-        $this->subscription_ad_url = $this->container['SUBSCRIPTION_AD_URL'];
         $this->twig                = $this->container['twig'];
         $this->assets_base_url     = $this->container['ASSETS_BASE_URL'];
     }
@@ -148,7 +142,6 @@ class Upgrade extends Abstract_Module
             'subscription_ad.twig',
             [
                 'image_src'        => $img_url,
-                'action_url'       => $this->subscription_ad_url,
                 'mailchimp_config' => $mailchimp_config,
                 'text'             => [
                     'title'         => sprintf(__('Get %d%% off the %s extensions', 'allex'),

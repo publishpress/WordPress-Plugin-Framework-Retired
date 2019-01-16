@@ -34,16 +34,6 @@ class Container extends \Pimple\Container
         /**
          * @param $c
          *
-         * @return mixed
-         */
-        $this['SUBSCRIPTION_AD_URL'] = function ($c) use ($values) {
-            return $values['SUBSCRIPTION_AD_URL'];
-        };
-
-
-        /**
-         * @param $c
-         *
          * @return bool|string
          */
         $this['FRAMEWORK_BASE_PATH'] = function ($c) {

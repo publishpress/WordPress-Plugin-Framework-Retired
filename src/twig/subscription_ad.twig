@@ -9,7 +9,7 @@
         <p>{{ text.thanks }}</p>
 
         {# Based on Mailchimp's embeded subscription form #}
-        <form class="form-horizontal validate" action="{{ action_url|raw }}" method="post" target="_blank">
+        <form class="form-horizontal validate" action="{{ mailchimp_config.action_url|raw }}" method="post" target="_blank">
             <div class="control-group">
                 <label for="mce-EMAIL">{{ text.email_address }}  <span class="asterisk">*</span></label>
 
