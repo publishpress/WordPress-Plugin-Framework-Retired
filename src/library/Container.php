@@ -65,10 +65,20 @@ class Container extends \Pimple\Container
                 $abspath = preg_replace('#/$#', '', $abspath);
             }
 
+            // Add support for bedrock.
+            if (class_exists('\\Roots\\Bedrock\\Autoloader')) {
+                $abspath = str_replace('/wp/', '/', $abspath);
+            }
+
             $path = str_replace($abspath, '', $c['FRAMEWORK_BASE_PATH']);
             $path = str_replace('\\', '/', $path);
 
-            return get_site_url() . '/' . $path . '/assets';
+            $siteUrl = get_site_url();
+            if (class_exists('\\Roots\\Bedrock\\Autoloader')) {
+                $siteUrl = str_replace('/wp', '', $siteUrl);
+            }
+
+            return $siteUrl . '/' . $path . '/assets';
         };
 
         /**
@@ -87,11 +97,12 @@ class Container extends \Pimple\Container
          */
         $this['PLUGIN_TITLE'] = function ($c) {
             if (is_admin()) {
+
                 if ( ! function_exists('get_plugin_data')) {
                     require_once ABSPATH . '/wp-admin/includes/plugin.php';
                 }
 
-                $data = get_plugin_data(ABSPATH . '/wp-content/plugins/' . $c['PLUGIN_BASENAME']);
+                $data = get_plugin_data(WP_PLUGIN_DIR . '/' . $c['PLUGIN_BASENAME']);
 
                 return $data['Name'];
             }

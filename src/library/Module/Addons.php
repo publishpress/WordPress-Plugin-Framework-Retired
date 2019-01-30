@@ -480,7 +480,7 @@ class Addons extends Abstract_Module
         $pool = apply_filters('allex_addons', [], $plugin);
 
         foreach ($pool as $addon) {
-            if (file_exists(ABSPATH . 'wp-content/plugins/' . $addon['slug'] . '/' . $addon['slug'] . '.php')) {
+            if (file_exists(WP_PLUGIN_DIR . '/' . $addon['slug'] . '/' . $addon['slug'] . '.php')) {
                 add_action('plugin_action_links_' . $addon['slug'] . '/' . $addon['slug'] . '.php',
                     [$this, 'actionSetLicenseKeyLink'], 998, 2);
 
