@@ -277,16 +277,18 @@
 
 .allex_subscription_ad_button {
     background: #db5852;
-    color: #ffffff;
+    color: #ffffff !important;
     border: none;
-    padding: 20px !important;
+    padding: 10px !important;
     -webkit-border-radius: 20px !important;
     -moz-border-radius: 20px !important;
     border-radius: 20px !important;
-    width: 90%;
+    width: 100%;
     margin-top: 20px;
     text-transform: uppercase;
     cursor: pointer;
+    display: block;
+    box-sizing: border-box;
 }
 
 .allex_subscription_ad_link:hover {
