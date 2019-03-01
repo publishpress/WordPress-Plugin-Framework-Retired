@@ -58,27 +58,9 @@ class Container extends \Pimple\Container
          * @return string
          */
         $this['ASSETS_BASE_URL'] = function ($c) {
-            $abspath = ABSPATH;
+            $relativePath = str_replace(WP_CONTENT_DIR, '', $c['FRAMEWORK_BASE_PATH']);
 
-            // Fix for windows machines
-            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-                $abspath = preg_replace('#/$#', '', $abspath);
-            }
-
-            // Add support for bedrock.
-            if (class_exists('\\Roots\\Bedrock\\Autoloader')) {
-                $abspath = str_replace('/wp/', '/', $abspath);
-            }
-
-            $path = str_replace($abspath, '', $c['FRAMEWORK_BASE_PATH']);
-            $path = str_replace('\\', '/', $path);
-
-            $siteUrl = get_site_url();
-            if (class_exists('\\Roots\\Bedrock\\Autoloader')) {
-                $siteUrl = str_replace('/wp', '', $siteUrl);
-            }
-
-            return $siteUrl . '/' . $path . '/assets';
+            return WP_CONTENT_URL . $relativePath . '/assets';
         };
 
         /**
