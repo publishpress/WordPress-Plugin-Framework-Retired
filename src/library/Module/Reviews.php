@@ -234,7 +234,7 @@ class Reviews extends Abstract_Module
                 'no'   => admin_url("?review_plugin={$this->plugin_name}&review_action=no"),
             ],
             'labels'  => [
-                'ok'   => __('Ok, you deserved it', 'allex'),
+                'ok'   => __('Ok, you deserve it', 'allex'),
                 'done' => __('I already did', 'allex'),
                 'no'   => __('No, not good enough for now', 'allex'),
             ],
