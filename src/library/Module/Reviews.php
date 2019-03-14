@@ -4,7 +4,8 @@ namespace Allex\Module;
 
 use Allex\Container;
 
-class Reviews extends Abstract_Module {
+class Reviews extends Abstract_Module
+{
     const REPEAT_INTERVAL = '+30 days';
 
     /**
@@ -42,8 +43,9 @@ class Reviews extends Abstract_Module {
      *
      * @param Container $container
      */
-    public function __construct( Container $container ) {
-        parent::__construct( $container );
+    public function __construct(Container $container)
+    {
+        parent::__construct($container);
 
         $this->twig                  = $this->container['twig'];
         $this->plugin_name           = $this->container['PLUGIN_NAME'];
@@ -60,13 +62,14 @@ class Reviews extends Abstract_Module {
      *
      * @param array $params
      */
-    public function init( $params ) {
-        $this->notice_text = esc_html( $params['notice_text'] );
+    public function init($params)
+    {
+        $this->notice_text = esc_html($params['notice_text']);
         $this->review_link = $params['review_link'];
 
-        $this->handle_request_actions( $params['redirect_url'] );
+        $this->handle_request_actions($params['redirect_url']);
 
-        if ( $this->should_display_notice() ) {
+        if ($this->should_display_notice()) {
             $this->add_action_admin_notice();
             $this->reset_options();
         }
@@ -77,41 +80,42 @@ class Reviews extends Abstract_Module {
      *
      * @param string $redirect_url
      */
-    protected function handle_request_actions( $redirect_url ) {
+    protected function handle_request_actions($redirect_url)
+    {
         // We only check GET requests
-        if ( $_SERVER['REQUEST_METHOD'] !== 'GET' ) {
+        if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
             return;
         }
 
-        if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+        if (defined('DOING_AJAX') && DOING_AJAX) {
             return;
         }
 
-        if ( defined( 'DOING_CRON' ) && DOING_CRON ) {
+        if (defined('DOING_CRON') && DOING_CRON) {
             return;
         }
 
         // Check if the request is related to the current plugin.
-        if ( ! isset( $_GET['review_plugin'] )
-             || $_GET['review_plugin'] != $this->plugin_name ) {
+        if ( ! isset($_GET['review_plugin'])
+             || $_GET['review_plugin'] != $this->plugin_name) {
             return;
         }
 
         // Check if the URL is related to any action
-        $valid_actions = [ 'no', 'done' ];
-        if ( ! isset( $_GET['review_action'] )
-             || ! in_array( $_GET['review_action'], $valid_actions ) ) {
+        $valid_actions = ['no', 'done'];
+        if ( ! isset($_GET['review_action'])
+             || ! in_array($_GET['review_action'], $valid_actions)) {
             return;
         }
 
-        $this->store_state_status( $_GET['review_action'] );
+        $this->store_state_status($_GET['review_action']);
 
         // Store the date for asking for the review again later.
-        if ( $_GET['review_action'] === 'no' ) {
-            $this->store_state_timestamp( date( 'Y-m-d' ) );
+        if ($_GET['review_action'] === 'no') {
+            $this->store_state_timestamp(date('Y-m-d'));
         }
 
-        $this->redirect( $redirect_url );
+        $this->redirect($redirect_url);
 
         exit;
     }
@@ -119,53 +123,57 @@ class Reviews extends Abstract_Module {
     /**
      * @param string $state
      */
-    protected function store_state_status( $status ) {
-        update_option( $this->option_name_status, $status );
+    protected function store_state_status($status)
+    {
+        update_option($this->option_name_status, $status, true);
     }
 
     /**
      * @param string $timestamp
      */
-    protected function store_state_timestamp( $timestamp ) {
-        update_option( $this->option_name_timestamp, $timestamp );
+    protected function store_state_timestamp($timestamp)
+    {
+        update_option($this->option_name_timestamp, $timestamp, true);
     }
 
     /**
      * @param $url
      */
-    protected function redirect( $url ) {
-        wp_redirect( admin_url( $url ) );
+    protected function redirect($url)
+    {
+        wp_redirect(admin_url($url));
     }
 
     /**
      * @return bool
      */
-    protected function should_display_notice() {
+    protected function should_display_notice()
+    {
 
-        if ( ! is_admin() ) {
+        if ( ! is_admin()) {
             return false;
         }
 
-        if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+        if (defined('DOING_AJAX') && DOING_AJAX) {
             return false;
         }
 
-        if ( defined( 'DOING_CRON' ) && DOING_CRON ) {
+        if (defined('DOING_CRON') && DOING_CRON) {
             return false;
         }
 
         // Check if the user answered "done".
         $status = $this->get_state_status();
 
-        if ( $status === 'done' ) {
+        if ($status === 'done') {
             return false;
         }
 
         // Check when the user answered no. We will ask again after a few days, if he still uses the plugin.
-        if ( $status === 'no' ) {
-            $date  = $this->get_state_timestamp( date( 'Y-m-d' ) );
-            $date  = strtotime( $date . ' ' . self::REPEAT_INTERVAL );
-            $today = strtotime( date( 'Y-m-d' ) );
+        if ($status === 'no') {
+            $date  = $this->get_state_timestamp(date('Y-m-d'));
+            $date  = strtotime($date . ' ' . self::REPEAT_INTERVAL);
+            $today = strtotime(date('Y-m-d'));
 
             return $date <= $today;
         }
@@ -178,8 +186,9 @@ class Reviews extends Abstract_Module {
      *
      * @return mixed|void
      */
-    protected function get_state_status( $default = '' ) {
-        return get_option( $this->option_name_status, $default );
+    protected function get_state_status($default = '')
+    {
+        return get_option($this->option_name_status, $default);
     }
 
     /**
@@ -187,23 +196,26 @@ class Reviews extends Abstract_Module {
      *
      * @return mixed|void
      */
-    protected function get_state_timestamp( $default = '' ) {
-        return get_option( $this->option_name_timestamp, $default );
+    protected function get_state_timestamp($default = '')
+    {
+        return get_option($this->option_name_timestamp, $default);
     }
 
     /**
      *
      */
-    protected function add_action_admin_notice() {
-        add_action( 'admin_notices', [ $this, 'render_notice' ] );
+    protected function add_action_admin_notice()
+    {
+        add_action('admin_notices', [$this, 'render_notice']);
     }
 
     /**
      * Reset the options.
      */
-    protected function reset_options() {
-        delete_option( $this->option_name_status );
-        delete_option( $this->option_name_timestamp );
+    protected function reset_options()
+    {
+        delete_option($this->option_name_status);
+        delete_option($this->option_name_timestamp);
     }
 
     /**
@@ -212,21 +224,22 @@ class Reviews extends Abstract_Module {
      *
      * @return mixed
      */
-    public function render_notice() {
+    public function render_notice()
+    {
         $context = [
-            'message' => esc_html( $this->notice_text ),
+            'message' => esc_html($this->notice_text),
             'links'   => [
                 'yes'  => $this->review_link,
-                'done' => admin_url( "?review_plugin={$this->plugin_name}&review_action=done" ),
-                'no'   => admin_url( "?review_plugin={$this->plugin_name}&review_action=no" ),
+                'done' => admin_url("?review_plugin={$this->plugin_name}&review_action=done"),
+                'no'   => admin_url("?review_plugin={$this->plugin_name}&review_action=no"),
             ],
             'labels'  => [
-                'ok'   => __( 'Ok, you deserved it', 'allex' ),
-                'done' => __( 'I already did', 'allex' ),
-                'no'   => __( 'No, not good enough for now', 'allex' ),
+                'ok'   => __('Ok, you deserve it', 'allex'),
+                'done' => __('I already did', 'allex'),
+                'no'   => __('No, not good enough for now', 'allex'),
             ],
         ];
 
-        echo $this->twig->render( 'notice_five_star_review.twig', $context );
+        echo $this->twig->render('notice_five_star_review.twig', $context);
     }
 }
