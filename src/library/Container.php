@@ -38,7 +38,13 @@ class Container extends \Pimple\Container
          */
         $this['FRAMEWORK_BASE_PATH'] = function ($c) {
             // Added slashes to prevent issues in Windows machines, where the backslash where interpreted as escape char.
+            $dir = __DIR__;
+
             $dir = str_replace('\\', '/', __DIR__);
+
+            if (DIRECTORY_SEPARATOR == '\\') {
+                $dir = str_replace('\\', '/', $dir);
+            }
 
             return realpath($dir . '/../');
         };
@@ -58,7 +64,18 @@ class Container extends \Pimple\Container
          * @return string
          */
         $this['ASSETS_BASE_URL'] = function ($c) {
-            $relativePath = str_replace(WP_CONTENT_DIR, '', $c['FRAMEWORK_BASE_PATH']);
+            $frameworkPath = $c['FRAMEWORK_BASE_PATH'];
+
+            if (DIRECTORY_SEPARATOR == '\\') {
+                $frameworkPath = str_replace('\\', '/', $frameworkPath);
+            }
+
+            $wpContentDir = WP_CONTENT_DIR;
+            if (DIRECTORY_SEPARATOR == '\\') {
+                $wpContentDir = str_replace('\\', '/', $wpContentDir);
+            }
+
+            $relativePath = str_replace($wpContentDir, '', $frameworkPath);
 
             return WP_CONTENT_URL . $relativePath . '/assets';
         };
