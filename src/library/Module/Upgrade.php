@@ -126,7 +126,7 @@ class Upgrade extends Abstract_Module
         }
 
         // @todo: The path have to be relative to plugin, not to the file. Having multiple plugins using this, only the same image will be used.
-        $img_url = $this->assets_base_url . '/img/gift-box.png';
+        $img_url = $this->assets_base_url . '/img/gift-box.png?v=' . $this->container['VERSION'];
 
         /**
          * Get the link for the subscription page.
@@ -141,9 +141,9 @@ class Upgrade extends Abstract_Module
         echo $this->twig->render(
             'subscription_ad.twig',
             [
-                'image_src'        => $img_url,
-                'link' => $ad_link,
-                'text'             => [
+                'image_src' => $img_url,
+                'link'      => $ad_link,
+                'text'      => [
                     'save'     => __('Save', 'allex'),
                     'discount' => $this->subscription_discount,
                     'item'     => sprintf(__('off the %s extensions', 'allex'), $this->plugin_title),
