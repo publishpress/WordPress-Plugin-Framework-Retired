@@ -82,13 +82,8 @@ class Upgrade extends Abstract_Module
      */
     public function plugin_action_links($links)
     {
-        $context = [
-            'url'   => $this->url,
-            'label' => __('Upgrade', 'allex'),
-            'class' => $this->plugin_name,
-        ];
-
-        $link = $this->twig->render('action_link_upgrade.twig', $context);
+        $link = '<a href="' . $this->url . '" target="_blank" class="allex-highlight allex-upgrade-link ' . $this->plugin_name . '">'
+                . __('Upgrade', 'allex') . '</a>';
 
         $links = array_merge($links, [$link]);
 
