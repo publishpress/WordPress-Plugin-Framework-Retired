@@ -115,6 +115,11 @@ class Reviews extends Abstract_Module
             $this->store_state_timestamp(date('Y-m-d'));
         }
 
+        // Adapt redirect argument passed from js.
+        if (false === strpos($redirect_url, '.php')) {
+            $redirect_url = "admin.php?page=$redirect_url";
+        }
+
         $this->redirect($redirect_url);
 
         exit;
