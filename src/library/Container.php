@@ -19,7 +19,7 @@ class Container extends \Pimple\Container
          * @return string
          */
         $this['VERSION'] = function ($c) {
-            return '0.6.5';
+            return '0.6.6';
         };
 
         /**
@@ -74,6 +74,11 @@ class Container extends \Pimple\Container
             if (DIRECTORY_SEPARATOR == '\\') {
                 $wpContentDir = str_replace('\\', '/', $wpContentDir);
             }
+
+	        // Some servers have a weird ABSPATH, so we make a minor adjustment here.
+	        if (ABSPATH === '//') {
+		        $wpContentDir = str_replace('//', '/', $wpContentDir);
+	        }
 
             $relativePath = str_replace($wpContentDir, '', $frameworkPath);
 
