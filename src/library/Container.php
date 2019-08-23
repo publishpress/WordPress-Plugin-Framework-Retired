@@ -75,6 +75,11 @@ class Container extends \Pimple\Container
                 $wpContentDir = str_replace('\\', '/', $wpContentDir);
             }
 
+	        // Some servers have a weird ABSPATH, so we make a minor adjustment here.
+	        if (ABSPATH === '//') {
+		        $wpContentDir = str_replace('//', '/', $wpContentDir);
+	        }
+
             $relativePath = str_replace($wpContentDir, '', $frameworkPath);
 
             return WP_CONTENT_URL . $relativePath . '/assets';
