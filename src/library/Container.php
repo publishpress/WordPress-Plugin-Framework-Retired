@@ -75,10 +75,10 @@ class Container extends \Pimple\Container
                 $wpContentDir = str_replace('\\', '/', $wpContentDir);
             }
 
-	        // Some servers have a weird ABSPATH, so we make a minor adjustment here.
-	        if (ABSPATH === '//') {
-		        $wpContentDir = str_replace('//', '/', $wpContentDir);
-	        }
+            // Some servers have a weird ABSPATH, so we make a minor adjustment here.
+            if (ABSPATH === '//') {
+                $wpContentDir = str_replace('//', '/', $wpContentDir);
+            }
 
             $relativePath = str_replace($wpContentDir, '', $frameworkPath);
 
@@ -101,8 +101,7 @@ class Container extends \Pimple\Container
          */
         $this['PLUGIN_TITLE'] = function ($c) {
             if (is_admin()) {
-
-                if ( ! function_exists('get_plugin_data')) {
+                if (!function_exists('get_plugin_data')) {
                     require_once ABSPATH . '/wp-admin/includes/plugin.php';
                 }
 
