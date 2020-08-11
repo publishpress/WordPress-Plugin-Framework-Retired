@@ -82,7 +82,9 @@ class Container extends \Pimple\Container
 
             $relativePath = str_replace($wpContentDir, '', $frameworkPath);
 
-            return WP_CONTENT_URL . $relativePath . '/assets';
+            $baseUrl = str_replace(['https://', 'http://'], '//', WP_CONTENT_URL);
+
+            return $baseUrl . $relativePath . '/assets';
         };
 
         /**
