@@ -33,11 +33,6 @@ class Upgrade extends Abstract_Module
     protected $twig;
 
     /**
-     * @var int
-     */
-    protected $subscription_discount = 20;
-
-    /**
      * Upgrade constructor.
      *
      * @param Container $container
@@ -75,8 +70,6 @@ class Upgrade extends Abstract_Module
             [$this, 'plugin_action_links'],
             999
         );
-        add_action('allex_upgrade_sidebar_ad', [$this, 'render_sidebar_ad']);
-        add_filter('allex_upgrade_show_sidebar_ad', [$this, 'filter_allex_upgrade_show_sidebar_ad'], 10, 2);
     }
 
     /**
@@ -92,90 +85,5 @@ class Upgrade extends Abstract_Module
         $links = array_merge($links, [$link]);
 
         return $links;
-    }
-
-    /**
-     * Echo the sidebar with a form to subscribe for 20% discount.
-     *
-     * @param string $plugin_name
-     */
-    public function render_sidebar_ad($plugin_name = null)
-    {
-        /*
-         * ---------------------------------------------------------------------
-         * Backward compatibility for users using PublishPress and UpStream with
-         * an older version of this library where the $plugin_name param is not
-         * sent. We force its value, so the add-ons page keeps working until
-         * they update the plugin.
-         *
-         * @todo: Remove this after a few releases
-         *
-         * @since 1.16.3
-         */
-        if (is_null($plugin_name)) {
-            $plugin_name = $this->plugin_name;
-        }
-        /*
-         * ---------------------------------------------------------------------
-         */
-
-        // If not related to this plugin, we skip it.
-        if ($plugin_name !== $this->plugin_name) {
-            return;
-        }
-
-        // @todo: The path have to be relative to plugin, not to the file. Having multiple plugins using this, only the same image will be used.
-        $img_url = $this->assets_base_url . '/img/gift-box.png?v=' . $this->container['VERSION'];
-
-        /**
-         * Get the link for the subscription page.
-         *
-         * @param array $ad_link
-         * @param string $plugin_name
-         *
-         * @return string
-         */
-        $ad_link = apply_filters('allex_upgrade_link', '', $this->plugin_name);
-
-        echo $this->twig->render(
-            'subscription_ad.twig',
-            [
-                'image_src' => $img_url,
-                'link'      => $ad_link,
-                'text'      => [
-                    'save'     => __('Save', 'allex'),
-                    'discount' => $this->subscription_discount,
-                    'item'     => sprintf(__('off the %s extensions', 'allex'), $this->plugin_title),
-                    'getit'    => __('Get it', 'allex'),
-                ],
-            ]
-        );
-    }
-
-    /**
-     * @param bool $show_sidebar
-     * @param string $plugin_name
-     *
-     * @return bool
-     */
-    public function filter_allex_upgrade_show_sidebar_ad($show_sidebar, $plugin_name = null)
-    {
-        if ((defined('DOING_AJAX') && DOING_AJAX)
-            || (defined('DOING_CRON') && DOING_CRON)
-            || !is_admin()) {
-            return false;
-        }
-
-        if ($plugin_name !== $this->plugin_name) {
-            return $show_sidebar;
-        }
-
-        // Check if we have all add-ons installed. If so, we do not show the sidebar.
-        $addons_installed = apply_filters('allex_installed_addons', [], $this->plugin_name);
-
-        $show_sidebar = count($addons_installed) === 0;
-
-
-        return $show_sidebar;
     }
 }

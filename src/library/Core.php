@@ -48,14 +48,12 @@ class Core
      * @param string $edd_api_url
      * @param string $plugin_author
      * @param string $updates_doc_url
-     * @param string Deprecated $subscription_ad_url
      */
     public function __construct(
         $plugin_base_name,
         $edd_api_url,
         $plugin_author,
-        $updates_doc_url = '',
-        $subscription_ad_url = ''
+        $updates_doc_url = ''
     ) {
         $this->init_container($plugin_base_name, $edd_api_url, $plugin_author, $updates_doc_url);
 
