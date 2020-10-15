@@ -1,5 +1,7 @@
 # WordPress Plugin Framework
 
+> :warning: **This library is retired**: Please, use the https://github.com/publishpress/WordPress-Version-Notices instead!
+
 This is basic library for creating WordPress plugins on Alledia.
 
 Use it on the main plugin only. For add-ons, use [this library](https://github.com/upstreamplugin/EDD-SL-Plugin-Updater) for adding EDD integration.
